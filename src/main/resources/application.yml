@@ -1,0 +1,30 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: runus
+
+  datasource:
+    driver-class-name: oracle.jdbc.OracleDriver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.OracleDialect  # Hibernate Dialect 설정 추가
+        show_sql: true
+        format_sql: true
+
+  mvc:
+    pathmatch:
+      matching-strategy: ant-path-matcher
+
+  config:
+    import: application-db.yml
+
+logging:
+  level:
+    root: INFO
+    com.fourback: DEBUG
