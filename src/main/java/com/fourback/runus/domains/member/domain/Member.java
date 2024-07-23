@@ -1,6 +1,6 @@
 package com.fourback.runus.domains.member.domain;
 
-import com.fourback.runus.domains.member.dto.message.ReceiveMemberUpdateFormatter;
+import com.fourback.runus.domains.member.dto.requeset.UpdateMemberRequest;
 import com.fourback.runus.domains.member.enumerate.MemberRole;
 import com.fourback.runus.global.audit.entity.BaseTimeEntity;
 import jakarta.persistence.*;
@@ -8,7 +8,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.SQLDelete;
 
 import java.time.LocalDate;
 
@@ -52,7 +51,7 @@ public class Member extends BaseTimeEntity {
         this.role = MemberRole.USER;
     }
 
-    public Member updateMemberInfo(ReceiveMemberUpdateFormatter request) {
+    public Member updateMemberInfo(UpdateMemberRequest request) {
         this.nickName = request.nickName();
         this.birth = request.birth();
         this.height = request.height();
