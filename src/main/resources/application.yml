@@ -24,7 +24,15 @@ spring:
   config:
     import: application-db.yml
 
+  # RabbitMQ
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
 logging:
   level:
     root: INFO
     com.fourback: DEBUG
+

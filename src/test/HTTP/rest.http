@@ -1,0 +1,18 @@
+POST http://localhost:8080/member/create
+Content-Type: application/json
+
+{
+  "email": "qwer2@gmail.com",
+  "nickName": "닉넴싫어",
+  "password": "qwer123",
+  "birth": "1811-12-12",
+  "height": 198,
+  "weight": 51
+}
+
+###
+GET http://localhost:8080/member/findAll
+
+###
+GET http://localhost:8080/member/findById/{{id}}
+
