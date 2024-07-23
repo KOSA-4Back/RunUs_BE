@@ -31,6 +31,10 @@ public class MainServerConfig {
         return new Queue("member.update.queue", true);
     }
     @Bean
+    public Queue userUpdateProfileQueue(){
+        return new Queue("member.update.profile.queue", true);
+    }
+    @Bean
     public Queue userDeleteQueue(){
         return new Queue("member.delete.queue", true);
     }
@@ -46,7 +50,10 @@ public class MainServerConfig {
     @Bean
     public Binding bindingUserUpdateQueue(DirectExchange exchange, Queue userUpdateQueue){
         return BindingBuilder.bind(userUpdateQueue()).to(exchange).with("member.update");
-
+    }
+    @Bean
+    public Binding bindingUserUpdateProfileQueue(DirectExchange exchange, Queue userUpdateProfileQueue){
+        return BindingBuilder.bind(userUpdateProfileQueue()).to(exchange).with("member.update.profile");
     }
     @Bean
     public Binding bindingUserDeleteQueue(DirectExchange exchange, Queue userDeleteQueue){
