@@ -1,6 +1,4 @@
-package com.fourback.runus.domains.member.dto.response;
-
-import com.fourback.runus.domains.member.domain.Member;
+package com.fourback.runus.domains.member.dto.message;
 
 import java.time.LocalDate;
 
@@ -16,7 +14,7 @@ import java.time.LocalDate;
  * 2024-07-23        Yeong-Huns       최초 생성
  */
 public record ReceiveMemberUpdateFormatter(
-        long id,
+        long userId,
         String nickName,
         LocalDate birth,
         int height,

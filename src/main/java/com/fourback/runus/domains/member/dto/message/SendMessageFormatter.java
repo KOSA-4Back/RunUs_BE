@@ -1,4 +1,4 @@
-package com.fourback.runus.domains.member.dto.response;
+package com.fourback.runus.domains.member.dto.message;
 
 import com.fourback.runus.domains.member.domain.Member;
 import lombok.Builder;

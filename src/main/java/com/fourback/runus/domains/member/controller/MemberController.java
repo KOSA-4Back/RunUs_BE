@@ -1,10 +1,12 @@
 package com.fourback.runus.domains.member.controller;
 
 import com.fourback.runus.domains.member.domain.Member;
+import com.fourback.runus.domains.member.dto.message.SendDeleteMemberFormatter;
 import com.fourback.runus.domains.member.dto.requeset.CreateMemberRequest;
+import com.fourback.runus.domains.member.dto.requeset.UpdateMemberProfileRequest;
 import com.fourback.runus.domains.member.dto.requeset.UpdateMemberRequest;
 import com.fourback.runus.domains.member.dto.response.FindMembersResponse;
-import com.fourback.runus.domains.member.dto.response.SendMessageFormatter;
+import com.fourback.runus.domains.member.dto.message.SendMessageFormatter;
 import com.fourback.runus.domains.member.service.MemberService;
 import com.fourback.runus.global.error.errorCode.ResponseCode;
 import jakarta.validation.Valid;
@@ -14,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -57,25 +60,27 @@ public class MemberController {
         return ResponseEntity.ok().body(ResponseCode.MEMBER_UPDATED);
     }
 
-    @PutMapping("/updateMemberInfo/{id}")
+    @PutMapping("/updateMemberInfo")
     public ResponseEntity<ResponseCode> updateMemberInfo(@RequestBody UpdateMemberRequest request){
-        //Member member = memberService.updateMember(request);
         rabbitTemplate.convertAndSend("member.update", request);
         return ResponseEntity.ok().body(ResponseCode.MEMBER_UPDATED);
     }
 
+    @PutMapping("/updateMemberProfile")
+    public ResponseEntity<ResponseCode> updateMemberProfile(@RequestBody UpdateMemberProfileRequest request){
+        rabbitTemplate.convertAndSend("member.update.profile", request);
+        return ResponseEntity.ok().body(ResponseCode.MEMBER_UPDATED);
+    }
 
     @DeleteMapping("/deleteById/{id}")
     public ResponseEntity<ResponseCode> deleteMemberById(@PathVariable Long id) {
-        memberService.deleteById(id);
-        rabbitTemplate.convertAndSend("member.delete", id);
+        rabbitTemplate.convertAndSend("member.delete", SendDeleteMemberFormatter.of(id, LocalDateTime.now()));
         return ResponseEntity.ok().body(ResponseCode.MEMBER_DELETED);
     }
 
     @DeleteMapping("/deleteAll")
     public ResponseEntity<ResponseCode> deleteAllMembers() {
-        memberService.deleteAllMembers();
-        rabbitTemplate.convertAndSend("member.deleteAll", ""); // 매개 변수에 빈 문자열을 넣어줘야 라우팅 키로 인식함
+        rabbitTemplate.convertAndSend("member.delete.all", LocalDateTime.now());
         return ResponseEntity.ok().body(ResponseCode.MEMBER_DELETED);
     }
 

@@ -1,7 +1,6 @@
 package com.fourback.runus.domains.member.domain;
 
-import com.fourback.runus.domains.member.dto.requeset.UpdateMemberRequest;
-import com.fourback.runus.domains.member.dto.response.ReceiveMemberUpdateFormatter;
+import com.fourback.runus.domains.member.dto.message.ReceiveMemberUpdateFormatter;
 import com.fourback.runus.domains.member.enumerate.MemberRole;
 import com.fourback.runus.global.audit.entity.BaseTimeEntity;
 import jakarta.persistence.*;
@@ -27,7 +26,6 @@ import java.time.LocalDate;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@SQLDelete(sql = "UPDATE members SET deleted_at = SYSDATE where USER_ID= ?")
 @Table(name = "members")
 public class Member extends BaseTimeEntity {
     @Id
@@ -71,4 +69,5 @@ public class Member extends BaseTimeEntity {
         this.role = MemberRole.ADMIN;
         return this;
     }
+
 }

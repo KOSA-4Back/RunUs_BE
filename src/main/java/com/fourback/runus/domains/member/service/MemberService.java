@@ -57,7 +57,7 @@ public class MemberService {
 
 //    @Transactional
 //    public Member updateMember(UpdateMemberRequest request) {
-//        return findById(request.id()).updateMemberInfo(request); // JPA 변경 감지 저장 -> 채팅 서버로 전달하기 위해 Member 반환
+//        return findById(request.userId()).updateMemberInfo(request); // JPA 변경 감지 저장 -> 채팅 서버로 전달하기 위해 Member 반환
 //    }
 
     @Transactional
