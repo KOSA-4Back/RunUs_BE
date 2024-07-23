@@ -17,7 +17,7 @@ import java.time.LocalDate;
  */
 public record UpdateMemberRequest(
         @NotEmpty
-        long id,
+        long userId,
         @NotEmpty
         String nickName,
         @NotEmpty

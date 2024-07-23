@@ -3,7 +3,7 @@ Content-Type: application/json
 
 {
   "email": "qwer2@gmail.com",
-  "nickName": "닉넴싫어",
+  "nickName": "영희",
   "password": "qwer123",
   "birth": "1811-12-12",
   "height": 198,
@@ -14,5 +14,19 @@ Content-Type: application/json
 GET http://localhost:8080/member/findAll
 
 ###
-GET http://localhost:8080/member/findById/{{id}}
+GET http://localhost:8080/member/findById/10
 
+###
+PUT http://localhost:8080/member/roleUpdate/
+
+###
+PUT http://localhost:8080/member/updateMemberInfo
+Content-Type: application/json
+
+{
+  "userId": 14,
+  "nickName": "변경된 아이디",
+  "birth": "1998-12-12",
+  "height": 177,
+  "weight": 60
+}
