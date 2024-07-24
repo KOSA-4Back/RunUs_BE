@@ -36,6 +36,7 @@ public record FindMembersResponse(
                 .email(member.getEmail())
                 .nickName(member.getNickName())
                 .birth(member.getBirth())
+                .profileUrl(member.getProfileUrl())
                 .height(member.getHeight())
                 .weight(member.getWeight())
                 .role(member.getRole().toString())

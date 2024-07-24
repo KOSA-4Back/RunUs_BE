@@ -25,6 +25,7 @@ public enum ResponseCode {
     MEMBER_CREATED(HttpStatus.CREATED, "B01", "가입 되셨습니다."), 
     MEMBER_UPDATED(HttpStatus.OK, "B00", "수정 완료"),
     MEMBER_DELETED(HttpStatus.OK, "B00", "회원님의 정보가 무사히 삭제되었습니다."),
+    MEMBER_ALL_DELETED(HttpStatus.OK, "B00", "모든 회원의 데이터가 삭제 되었습니다."),
 
     // Auth
     USER_NOT_FOUND(HttpStatus.UNAUTHORIZED, "D90", "인증 정보가 없는 요청입니다"),

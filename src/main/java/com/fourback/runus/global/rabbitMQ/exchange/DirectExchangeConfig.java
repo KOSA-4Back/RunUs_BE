@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
+
 /**
  * packageName    : com.fourback.runus.global.rabbitMQ.exchange
  * fileName       : DirectConfig
@@ -23,7 +24,6 @@ import org.springframework.context.annotation.Primary;
 @Configuration
 public class DirectExchangeConfig {
     @Bean
-    @Primary
     public Queue userCreateQueue(){
         return new Queue("member.create.queue", true);
     }
