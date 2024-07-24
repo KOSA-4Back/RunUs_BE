@@ -1,4 +1,4 @@
-package com.fourback.runus.domains.member.dto.message;
+package com.fourback.runus.domains.member.dto.requeset;
 
 import lombok.Builder;
 
@@ -16,8 +16,8 @@ import java.time.LocalDateTime;
  * 2024-07-23        Yeong-Huns       최초 생성
  */
 @Builder
-public record SendDeleteMemberFormatter(long userId, LocalDateTime deletedAt) {
-    public static SendDeleteMemberFormatter of(long userId, LocalDateTime deletedAt) {
-        return new SendDeleteMemberFormatter(userId, deletedAt);
+public record SendDeleteMemberRequest(long userId, LocalDateTime deletedAt) {
+    public static SendDeleteMemberRequest of(long userId, LocalDateTime deletedAt) {
+        return new SendDeleteMemberRequest(userId, deletedAt);
     }
 }
