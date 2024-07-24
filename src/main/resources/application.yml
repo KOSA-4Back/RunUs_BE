@@ -21,8 +21,15 @@ spring:
     pathmatch:
       matching-strategy: ant-path-matcher
 
+  # 파일 크기 설정
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 2MB
+      max-request-size: 2MB
+
   config:
-    import: application-db.yml
+    import: application-db.yml, application-security.yml
 
   # RabbitMQ
   rabbitmq:
