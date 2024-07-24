@@ -48,7 +48,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-amqp' // RabbitMQ
 	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310' // JSON binding
 	testImplementation 'org.springframework.amqp:spring-rabbit-test' // RabbitMQ
-
+}
 
 tasks.named('test') {
 	useJUnitPlatform()
