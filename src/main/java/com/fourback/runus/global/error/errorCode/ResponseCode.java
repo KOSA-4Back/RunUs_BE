@@ -22,7 +22,7 @@ import org.springframework.http.HttpStatus;
 @JsonFormat(shape = JsonFormat.Shape.OBJECT) // JSON 으로 전달하기 위함
 public enum ResponseCode {
     // A : 100 , B : 200, C : 300, D : 400, E : 500
-    MEMBER_CREATED(HttpStatus.CREATED, "B01", "가입 되셨습니다."),
+    MEMBER_CREATED(HttpStatus.CREATED, "B01", "가입 되셨습니다."), 
     MEMBER_UPDATED(HttpStatus.OK, "B00", "수정 완료"),
     MEMBER_DELETED(HttpStatus.OK, "B00", "회원님의 정보가 무사히 삭제되었습니다."),
 
