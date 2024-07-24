@@ -1,6 +1,5 @@
-package com.fourback.runus.domains.members.controller;
+package com.fourback.runus.domains.member.controller;
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,8 +22,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fourback.runus.domains.members.domain.Member;
-import com.fourback.runus.domains.members.service.MemberService;
+import com.fourback.runus.domains.member.domain.Member;
+import com.fourback.runus.domains.member.service.MemberService;
 import com.fourback.runus.global.security.util.JwtUtil;
 
 @RestController
@@ -45,8 +44,6 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody Member member) {
         logger.info("Register endpoint called with email: {}", member.getEmail());
-        member.setCreatedAt(LocalDateTime.now());
-        member.setUpdatedAt(LocalDateTime.now());
         memberService.registerMember(member);
         logger.info("User registered successfully with email: {}", member.getEmail());
         return ResponseEntity.status(HttpStatus.CREATED).body("/register-success.html");

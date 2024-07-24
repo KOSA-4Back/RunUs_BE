@@ -1,16 +1,17 @@
 package com.fourback.runus.domains.member.repository;
 
-import com.fourback.runus.domains.member.domain.Member;
-import com.fourback.runus.domains.member.dto.requeset.SendDeleteMemberRequest;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
+import com.fourback.runus.domains.member.domain.Member;
+import com.fourback.runus.domains.member.dto.requeset.SendDeleteMemberRequest;
 
 /**
  * packageName    : com.fourback.runus.member.repository
@@ -39,4 +40,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     @Transactional
     @Query("UPDATE Member m SET m.deletedAt = :deletionTime")
     void deleteAllMembers(@Param("deletionTime") LocalDateTime deletionTime);
+    
+    Optional<Member> findByEmail(String email);
 }
