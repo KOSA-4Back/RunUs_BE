@@ -207,7 +207,7 @@ bin/
 *.hprof
 
 # Include the application-db.yml file
-!src/main/resources/application-db.yml
+src/main/resources/application-db.yml
 
 # End of https://www.toptal.com/developers/gitignore/api/windows,intellij,netbeans,visualstudiocode,gradle
 application-db.yml
