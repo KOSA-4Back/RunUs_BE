@@ -36,3 +36,9 @@ logging:
     root: INFO
     com.fourback: DEBUG
 
+    
+jwt:
+  secret: 5Y8_rW_0linl5Lz1Vh90bG8RTPzLlgFLiuR-_rPsHFb0q0OCLyIICHi5nBdBjcsJg5q5pwPT8o721h-pAtUEGg==
+  expiration: 86400000  # 1 day
+
+
