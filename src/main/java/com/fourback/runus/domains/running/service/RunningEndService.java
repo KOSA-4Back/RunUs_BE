@@ -8,13 +8,15 @@ import com.fourback.runus.domains.running.dto.request.StartRunningRequest;
 import com.fourback.runus.domains.running.repository.RunningEndRepository;
 import com.fourback.runus.domains.running.repository.RunningRepository;
 
-@Service
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
+@Service
 public class RunningEndService {
 	
 	
-	private RunningRepository repository;
-	private RunningEndRepository endRepository;
+	private final RunningRepository repository;
+	private final RunningEndRepository endRepository;
 
 	//러닝 목표 설정
 	@Transactional

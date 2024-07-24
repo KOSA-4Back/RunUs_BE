@@ -6,12 +6,14 @@ import org.springframework.transaction.annotation.Transactional;
 import com.fourback.runus.domains.running.dto.request.StartRunningRequest;
 import com.fourback.runus.domains.running.repository.RunningRepository;
 
-@Service
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
+@Service
 public class RunningService {
 	
 	
-	private RunningRepository repository;
+	private final RunningRepository repository;
 
 	//러닝 목표 설정
 	@Transactional

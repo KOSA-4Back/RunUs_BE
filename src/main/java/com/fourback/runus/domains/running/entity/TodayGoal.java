@@ -1,7 +1,7 @@
 package com.fourback.runus.domains.running.entity;
 
-import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -25,13 +25,14 @@ public class TodayGoal {
     private long userId;
     private LocalDate today;
     private long goalKm;
-    private Timestamp registedAt;
-    private Timestamp deletedAt;
+    private LocalDateTime registedAt;
+    private LocalDateTime deletedAt;
 
     @Builder
     public TodayGoal(long userId, long goalKm) {
         this.userId = userId;
         this.goalKm = goalKm;
-       // this.today = LocalDate.now();
+        this.today = LocalDate.now();
+        this.registedAt = LocalDateTime.now();
     }
 }

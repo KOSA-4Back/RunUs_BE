@@ -12,12 +12,15 @@ import com.fourback.runus.domains.running.dto.request.StartRunningRequest;
 import com.fourback.runus.domains.running.service.RunningEndService;
 import com.fourback.runus.domains.running.service.RunningService;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/runnings")
 public class RunningController {
 
-    private RunningService runningService;
-    private RunningEndService runningEndService;
+    private final RunningService runningService;
+    private final RunningEndService runningEndService;
 
    //러닝 목표 설정
     @PostMapping("/start")

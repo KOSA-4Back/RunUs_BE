@@ -1,6 +1,7 @@
 package com.fourback.runus.domains.running.dto.request;
 
-import java.time.LocalDate;
+
+import java.time.LocalDateTime;
 
 import com.fourback.runus.domains.running.entity.RunTotalInfos;
 
@@ -11,8 +12,8 @@ public class EndRunningRequest {
     
     private long todayGoalId;
     private long userId;
-    private LocalDate startTime;
-    private LocalDate endTime;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
     private long totalDistance;
     private long totalCalories;
 

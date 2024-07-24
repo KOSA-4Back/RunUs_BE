@@ -63,6 +63,7 @@ public class TopicExchangeConfig {
 
     @Bean
     public Binding bindingDeleteAllQueue(TopicExchange exchange, @Qualifier("userDeleteAllQueue") Queue userDeleteAllQueue){
- 
-        return BindingBuilder.bind(userDeleteAllQueue).to(exchange).with("member.delete.all");}
+        return BindingBuilder.bind(userDeleteAllQueue).to(exchange).with("member.delete.all");
+    }
+}
     
