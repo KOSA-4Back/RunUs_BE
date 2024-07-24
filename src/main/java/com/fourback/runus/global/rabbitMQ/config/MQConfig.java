@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.amqp.core.DirectExchange;
+import org.springframework.amqp.core.FanoutExchange;
+import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.config.RetryInterceptorBuilder;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
@@ -31,10 +33,20 @@ import org.springframework.retry.support.RetryTemplate;
  * 2024-07-22        Yeong-Huns       최초 생성
  */
 @Configuration
-public class RabbitMQConfig {
+public class MQConfig {
     @Bean
     public DirectExchange directExchange() {
         return new DirectExchange("directExchange");
+    }
+
+    @Bean
+    public TopicExchange topicExchange() {
+        return new TopicExchange("topicExchange");
+    }
+
+    @Bean
+    public FanoutExchange fanoutExchange() {
+        return new FanoutExchange("fanoutExchange");
     }
     @Bean
     public MessageConverter jsonMessageConverter() {
@@ -56,7 +68,6 @@ public class RabbitMQConfig {
     public RabbitTemplate rabbitTemplate(CachingConnectionFactory connectionFactory) {
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
         rabbitTemplate.setMessageConverter(jsonMessageConverter());
-        rabbitTemplate.setExchange(directExchange().getName()); // "directExchange"
         return rabbitTemplate;
     }
     @Bean
