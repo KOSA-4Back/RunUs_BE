@@ -44,7 +44,7 @@ public class TopicExchangeConfig {
 
     @Bean
     public Binding bindingDeleteQueue(TopicExchange exchange, @Qualifier("userDeleteQueue") Queue userDeleteQueue){
-        return BindingBuilder.bind(userDeleteQueue).to(exchange).with("member.delete");
+       return BindingBuilder.bind(userDeleteQueue).to(exchange).with("member.delete");
     }
 
     @Bean
@@ -57,7 +57,7 @@ public class TopicExchangeConfig {
     }
     @Bean
     public Binding bindingUpdateProfileQueue(TopicExchange exchange, @Qualifier("userUpdateProfileQueue") Queue userUpdateProfileQueue){
-        return BindingBuilder.bind(userUpdateProfileQueue).to(exchange).with("member.update.profile");
+            return BindingBuilder.bind(userUpdateProfileQueue).to(exchange).with("member.update.profile");
     }
 
     @Bean
@@ -65,3 +65,4 @@ public class TopicExchangeConfig {
         return BindingBuilder.bind(userDeleteAllQueue).to(exchange).with("member.delete.all");
     }
 }
+    

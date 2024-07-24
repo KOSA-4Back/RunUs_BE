@@ -4,8 +4,11 @@ import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.Queue;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+
 
 /**
  * packageName    : com.fourback.runus.global.rabbitMQ.exchange
@@ -25,7 +28,7 @@ public class DirectExchangeConfig {
         return new Queue("member.create.queue", true);
     }
     @Bean
-    public Binding bindingCreateQueue(DirectExchange exchange, Queue userCreateQueue){
+    public Binding bindingCreateQueue(DirectExchange exchange, @Qualifier("userCreateQueue") Queue userCreateQueue){
         return BindingBuilder.bind(userCreateQueue).to(exchange).with("member.create");
     }
 }

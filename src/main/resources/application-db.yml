@@ -1,6 +1,0 @@
-spring:
-  datasource:
-    url: jdbc:oracle:thin:@//localhost:1521/xepdb1
-    username: runus
-    password: kosa4back!runus!@123
-    driver-class-name: oracle.jdbc.OracleDriver
