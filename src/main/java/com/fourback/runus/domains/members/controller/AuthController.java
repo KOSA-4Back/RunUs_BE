@@ -1,6 +1,8 @@
 package com.fourback.runus.domains.members.controller;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,7 +53,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody Member member) {
+    public ResponseEntity<Map<String, String>> login(@RequestBody Member member) {
         logger.info("Login endpoint called with email: {}", member.getEmail());
         try {
             Authentication authentication = authenticationManager.authenticate(
@@ -59,16 +61,19 @@ public class AuthController {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             String token = jwtUtil.generateToken(userDetails.getUsername());
             logger.info("User logged in successfully, token generated for email: {}", member.getEmail());
-            return ResponseEntity.ok("/login-success.html");
+            
+            Map<String, String> response = new HashMap<>();
+            response.put("token", token);
+            return ResponseEntity.ok(response);
         } catch (UsernameNotFoundException e) {
             logger.warn("Login failed for email: {}, reason: user not found", member.getEmail());
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         } catch (BadCredentialsException e) {
             logger.warn("Login failed for email: {}, reason: bad credentials", member.getEmail());
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("비밀번호가 틀렸습니다!");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         } catch (AuthenticationException e) {
             logger.error("Authentication error for email: {}", member.getEmail());
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("인증 오류가 발생했습니다.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
     }
 

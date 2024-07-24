@@ -8,6 +8,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -30,25 +31,29 @@ public class SecurityConfig {
     private static final Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
 
     private final JwtProvider jwtProvider;
+    private final AuthenticationConfiguration authenticationConfiguration;
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         logger.info("Configuring security filter chain");
-        http.cors().and().httpBasic().disable().csrf().disable().sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeHttpRequests(auth -> auth
-                    
-                	/*
-                	.requestMatchers("/api/members/register", "/register-success", 
-                                     "/api/members/login", "/login-success", 
-                                     "api/check-email")
-                    .permitAll()  // 인증 필요 없음
-                    .anyRequest().authenticated())  // 그 외 모든 요청은 인증 필요
-                 	*/
-                	
-                	.anyRequest().permitAll())
-                .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new JwtExceptionHandlingFilter(), JwtAuthenticationFilter.class); // 예외 처리 필터 추가
+        http
+				.csrf(AbstractHttpConfigurer::disable)
+				.httpBasic(AbstractHttpConfigurer::disable)
+				.formLogin(AbstractHttpConfigurer::disable)
+				.authorizeHttpRequests(auth -> auth
+                
+				/*		
+				.requestMatchers("/api/members/register", "/register-success", 
+                                 "/api/members/login", "/login-success", 
+                                 "/api/members/check-email", "/").permitAll()
+                .anyRequest().authenticated())
+                */								// 특정 url만 접근 허용
+				
+				.anyRequest().permitAll())		// 모두 접근 허용
+            .sessionManagement(session -> session
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(new JwtExceptionHandlingFilter(), JwtAuthenticationFilter.class);
 
         return http.build();
     }
