@@ -32,7 +32,12 @@ dependencies {
 
 
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'	// aws s3
+
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.2'  // JWT API
+  runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2'  // JWT Impl
+  runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.2'  // JWT Jackson
 	
+  
 	compileOnly 'org.projectlombok:lombok'	// 롬복
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'com.oracle.database.jdbc:ojdbc11'	// 오라클

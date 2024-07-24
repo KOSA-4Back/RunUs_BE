@@ -4,6 +4,7 @@ import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.TopicExchange;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -42,25 +43,27 @@ public class TopicExchangeConfig {
     }
 
     @Bean
-    public Binding bindingDeleteQueue(TopicExchange exchange, Queue userDeleteQueue){
-        return BindingBuilder.bind(userDeleteQueue).to(exchange).with("member.delete");
+
+    public Binding bindingDeleteQueue(TopicExchange exchange, @Qualifier("userDeleteQueue") Queue userDeleteQueue){
+       return BindingBuilder.bind(userDeleteQueue).to(exchange).with("member.delete");
     }
 
     @Bean
-    public Binding bindingUpdateQueue(TopicExchange exchange, Queue userUpdateQueue){
+    public Binding bindingUpdateQueue(TopicExchange exchange, @Qualifier("userUpdateQueue") Queue userUpdateQueue){
         return BindingBuilder.bind(userUpdateQueue).to(exchange).with("member.update");
     }
     @Bean
-    public Binding bindingUpdateRoleQueue(TopicExchange exchange, Queue userUpdateRoleQueue){
+    public Binding bindingUpdateRoleQueue(TopicExchange exchange, @Qualifier("userUpdateRoleQueue") Queue userUpdateRoleQueue){
         return BindingBuilder.bind(userUpdateRoleQueue).to(exchange).with("member.update.role");
     }
     @Bean
-    public Binding bindingUpdateProfileQueue(TopicExchange exchange, Queue userUpdateProfileQueue){
-        return BindingBuilder.bind(userUpdateProfileQueue).to(exchange).with("member.update.profile");
+    public Binding bindingUpdateProfileQueue(TopicExchange exchange, @Qualifier("userUpdateProfileQueue") Queue userUpdateProfileQueue){
+            return BindingBuilder.bind(userUpdateProfileQueue).to(exchange).with("member.update.profile");
     }
 
     @Bean
-    public Binding bindingDeleteAllQueue(TopicExchange exchange, Queue userDeleteAllQueue){
+    public Binding bindingDeleteAllQueue(TopicExchange exchange, @Qualifier("userDeleteAllQueue") Queue userDeleteAllQueue){
         return BindingBuilder.bind(userDeleteAllQueue).to(exchange).with("member.delete.all");
     }
 }
+    
