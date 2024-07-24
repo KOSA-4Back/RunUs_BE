@@ -1,23 +1,32 @@
 package com.fourback.runus.domains.member.controller;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.fourback.runus.domains.member.domain.Member;
-import com.fourback.runus.domains.member.dto.requeset.SendDeleteMemberRequest;
 import com.fourback.runus.domains.member.dto.requeset.CreateMemberRequest;
+import com.fourback.runus.domains.member.dto.requeset.SendCreateMemberRequest;
+import com.fourback.runus.domains.member.dto.requeset.SendDeleteMemberRequest;
 import com.fourback.runus.domains.member.dto.requeset.UpdateMemberProfileRequest;
 import com.fourback.runus.domains.member.dto.requeset.UpdateMemberRequest;
 import com.fourback.runus.domains.member.dto.response.FindMembersResponse;
-import com.fourback.runus.domains.member.dto.requeset.SendCreateMemberRequest;
 import com.fourback.runus.domains.member.service.MemberService;
 import com.fourback.runus.global.error.errorCode.ResponseCode;
 import com.fourback.runus.global.rabbitMQ.publisher.MQSender;
+
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  * packageName    : com.fourback.runus.member.controller
@@ -32,7 +41,7 @@ import java.util.List;
  */
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/member")
+@RequestMapping("/api/member")
 public class MemberController {
     private final MemberService memberService;
     private final MQSender MQSender;

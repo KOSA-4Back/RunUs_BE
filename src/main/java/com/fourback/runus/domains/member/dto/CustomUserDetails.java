@@ -1,4 +1,4 @@
-package com.fourback.runus.domains.members.dto;
+package com.fourback.runus.domains.member.dto;
 
 import java.util.Collection;
 import java.util.List;
@@ -7,7 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.fourback.runus.domains.members.domain.Member;
+import com.fourback.runus.domains.member.domain.Member;
 
 public class CustomUserDetails implements UserDetails {
 
@@ -23,7 +23,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(member.getRole()));
+        return List.of(new SimpleGrantedAuthority(member.getRole().name()));
     }
 
     @Override

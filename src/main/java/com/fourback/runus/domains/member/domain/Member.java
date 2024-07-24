@@ -1,15 +1,22 @@
 package com.fourback.runus.domains.member.domain;
 
+import java.time.LocalDate;
+
 import com.fourback.runus.domains.member.dto.requeset.UpdateMemberRequest;
 import com.fourback.runus.domains.member.enumerate.MemberRole;
 import com.fourback.runus.global.audit.entity.BaseTimeEntity;
-import jakarta.persistence.*;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDate;
 
 /**
  * packageName    : com.fourback.runus.member.repository
@@ -22,7 +29,7 @@ import java.time.LocalDate;
  * -----------------------------------------------------------
  * 2024-07-22        Yeong-Huns       최초 생성
  */
-@Getter
+@Data
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "members")
@@ -39,6 +46,7 @@ public class Member extends BaseTimeEntity {
     private int weight;
     @Enumerated(EnumType.STRING)
     private MemberRole role;
+    
 
     @Builder
     public Member(String email, String nickName, String password, LocalDate birth, int height, int weight) {
