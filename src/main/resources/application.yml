@@ -36,19 +36,7 @@ spring:
     host: localhost
     port: 5672
     username: guest
-    password: guest
-  
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: kmj88299@gmail.com  
-    password: ocxy dxmf donn rgts
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
+    password: guest  
 
 logging:
   level:
