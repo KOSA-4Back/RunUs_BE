@@ -21,8 +21,9 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 @JsonFormat(shape = JsonFormat.Shape.OBJECT) // JSON 으로 전달하기 위함
 public enum ResponseCode {
+
     // A : 100 , B : 200, C : 300, D : 400, E : 500
-    MEMBER_CREATED(HttpStatus.CREATED, "B01", "가입 되셨습니다."), 
+    MEMBER_CREATED(HttpStatus.CREATED, "B01", "가입 되셨습니다."),
     MEMBER_UPDATED(HttpStatus.OK, "B00", "수정 완료"),
     MEMBER_DELETED(HttpStatus.OK, "B00", "회원님의 정보가 무사히 삭제되었습니다."),
     MEMBER_ALL_DELETED(HttpStatus.OK, "B00", "모든 회원의 데이터가 삭제 되었습니다."),
@@ -32,6 +33,8 @@ public enum ResponseCode {
     TOKEN_INVALID(HttpStatus.BAD_REQUEST, "D91", "유효하지 않은 토큰입니다"),
     PASSWORD_NOT_MATCH(HttpStatus.BAD_REQUEST, "D92", "비밀번호와 비밀번호 확인이 일치하지 않습니다."),
     PASSWORD_INVALID(HttpStatus.BAD_REQUEST, "D93", "비밀번호가 올바르지 않습니다."),
+    EXISTS_EMAIL(HttpStatus.CONFLICT, "D95", "이미 존재하는 이메일입니다."),
+    EXISTS_NICKNAME(HttpStatus.CONFLICT, "D96", "이미 존재하는 닉네임입니다."),
 
     // User
     ALREADY_EXIST(HttpStatus.BAD_REQUEST, "D94", "이미 존재하는 사용자입니다."),
@@ -50,16 +53,24 @@ public enum ResponseCode {
     // 커스텀 예외 생성시 code 90번부터 지정 -> ex) REQUIRE_MORE_COFFEE(HttpStatus.SERVICE_UNAVAILABLE, "E90", "더 많은 커피가 필요합니다.")
     REQUIRE_MORE_COFFEE(HttpStatus.SERVICE_UNAVAILABLE, "E90", "커피가 부족 합니다.")
     ;
+
     private final HttpStatus status;
     private final String code;
     private final String message;
+    private Object data;
 
-    @JsonValue
-    public Object toJson() {
-        return new ResponseCodeJson(status.value(), code, message);
+    public ResponseCode withData(Object data) {
+        this.data = data;
+        return this;
     }
 
 
-    private record ResponseCodeJson(int status, String code, String message) {
+    @JsonValue
+    public Object toJson() {
+        return new ResponseCodeJson(status.value(), code, message, data);
+    }
+
+
+    private record ResponseCodeJson(int status, String code, String message, Object data) {
     }
 }

@@ -1,4 +1,4 @@
-package com.fourback.runus.global.config;
+package com.fourback.runus.global.amazon.config;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
@@ -25,7 +25,7 @@ public class S3Config {
 
     @Bean
     public AmazonS3 getAmazonS3() {
-        log.info(">>>>>>>>>>: getAmazonS3()");
+        log.info("====>>>>>>>>>> getAmazonS3()");
 
         BasicAWSCredentials awsCredentials = new BasicAWSCredentials(accessKey, secretKey);
         return  AmazonS3ClientBuilder.standard()

@@ -3,6 +3,7 @@ package com.fourback.runus.global.error.handler;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fourback.runus.global.error.errorCode.ResponseCode;
 import com.fourback.runus.global.error.exception.CustomBaseException;
+import com.fourback.runus.global.error.exception.JwtValidationException;
 import com.fourback.runus.global.error.exception.ResourceNotFoundException;
 import com.fourback.runus.global.error.response.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -80,6 +81,13 @@ public class  GlobalExceptionHandler {
     protected ResponseEntity<ErrorResponse> handle(AccessDeniedException e) {
         log.error("Response: {}", ErrorResponse.of(ResponseCode.METHOD_NOT_ALLOWED, " 🥲[상세 메세지] : " + e.getMessage()));
         return createErrorResponse(ResponseCode.METHOD_NOT_ALLOWED);
+    }
+
+
+    @ExceptionHandler(JwtValidationException.class)
+    protected ResponseEntity<ErrorResponse> handleJwtValidationException(JwtValidationException e) {
+        log.error("Response: {}", ErrorResponse.of(e.getResponseCode(), " 🥲[상세 메세지] : " + e.getMessage()));
+        return createErrorResponse(e.getResponseCode());
     }
 
 
