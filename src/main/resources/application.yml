@@ -42,12 +42,10 @@ logging:
   level:
     root: INFO
     com.fourback: DEBUG
-    
-    
 
     
 jwt:
-  secret: 5Y8_rW_0linl5Lz1Vh90bG8RTPzLlgFLiuR-_rPsHFb0q0OCLyIICHi5nBdBjcsJg5q5pwPT8o721h-pAtUEGg==
-  expiration: 86400000  # 1 day
+  secret: a29zYS1wcm9qZWN0LTNuZC1Gb3VyQmFjay1SdW5Vcy1Qcm9qZWN0
+  expiration: 1800000  # 30분
 
 

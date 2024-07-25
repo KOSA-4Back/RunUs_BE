@@ -1,25 +1,32 @@
 package com.fourback.runus.domains.member.service;
 
-import java.util.List;
+import com.fourback.runus.domains.member.domain.Member;
+import com.fourback.runus.domains.member.dto.requeset.CreateMemberRequest;
+import com.fourback.runus.domains.member.dto.requeset.LoginRequest;
+import com.fourback.runus.domains.member.dto.response.FindMembersResponse;
+import com.fourback.runus.domains.member.repository.MemberRepository;
+import com.fourback.runus.global.error.errorCode.ResponseCode;
+import com.fourback.runus.global.error.exception.CustomBaseException;
+import com.fourback.runus.global.error.exception.NotFoundException;
+import com.fourback.runus.global.security.provider.JwtProvider;
+import com.fourback.runus.global.service.S3Service;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.List;
+import java.util.Map;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
-import com.fourback.runus.domains.member.domain.Member;
-import com.fourback.runus.domains.member.dto.requeset.CreateMemberRequest;
-import com.fourback.runus.domains.member.dto.response.FindMembersResponse;
-import com.fourback.runus.domains.member.enumerate.MemberRole;
-import com.fourback.runus.domains.member.repository.MemberRepository;
-import com.fourback.runus.global.error.exception.NotFoundException;
-
-import lombok.RequiredArgsConstructor;
+import static com.fourback.runus.global.error.errorCode.ResponseCode.PASSWORD_INVALID;
 
 /**
- * packageName    : com.fourback.runus.member.repository
+ * packageName    : com.fourback.runus.member.service
  * fileName       : MemberService
  * author         : Yeong-Huns
  * date           : 2024-07-22
@@ -29,13 +36,17 @@ import lombok.RequiredArgsConstructor;
  * -----------------------------------------------------------
  * 2024-07-22        Yeong-Huns       최초 생성
  */
+@Log4j2
 @Service
 @RequiredArgsConstructor
 public class MemberService {
-	private static final Logger logger = LoggerFactory.getLogger(MemberService.class);
-	
+
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final S3Service s3Service;
+    private final JwtProvider jwtProvider;
+
+
 
     @Transactional
     public Member save(CreateMemberRequest request) {
@@ -49,6 +60,7 @@ public class MemberService {
                 .map(FindMembersResponse::from)
                 .toList();
     }
+
     @Transactional(readOnly = true)
     public Member findActiveMemberById(Long id) {
         return memberRepository.findActiveMemberById(id).orElseThrow(NotFoundException::new);
@@ -70,37 +82,74 @@ public class MemberService {
 //    }
 
     @Transactional
-    public void deleteAllMembers(){
+    public void deleteAllMembers() {
         memberRepository.deleteAll();
     }
 
     private Member findById(Long id) {
-        return memberRepository.findById(id).orElseThrow(()->new NotFoundException("Id: " + id + ", 해당 Id의 멤버 조회 실패"));
-    }
-    
-    // 회원가입
-    public Member registerMember(Member member) {
-        logger.info("Registering member with email: {}", member.getEmail());
-        member.setPassword(passwordEncoder.encode(member.getPassword()));
-        member.setRole(MemberRole.USER);
-        Member savedMember = memberRepository.save(member);
-        logger.info("Member registered with email: {}", savedMember.getEmail());
-        return savedMember;
+        return memberRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Id: " + id + ", 해당 Id의 멤버 조회 실패"));
     }
 
-    // 이메일(아이디)로 조회
-    public Member findByEmail(String email) {
-        logger.info("Finding member by email: {}", email);
-        return memberRepository.findByEmail(email).orElseThrow(() -> {
-            logger.error("Member not found with email: {}", email);
-            return new UsernameNotFoundException("존재하지 않는 아이디입니다!");
-        });
+
+
+    // 메인서버 회원가입
+    @Transactional
+    public Long registerMember(CreateMemberRequest createMemberRequest,
+                               MultipartFile multipartFile) {
+
+        log.info("====>>>>>>>>>> MemberService::registerMember");
+
+        // 이미지 S3에 저장
+        String imageUrl = "";
+        if (multipartFile != null && !multipartFile.isEmpty()) {
+            imageUrl = s3Service.uploadFile(multipartFile);
+            log.debug("====>>>>>>>>>> s3Service {}", s3Service.uploadFile(multipartFile));
+
+        }
+
+        Member saveMember = memberRepository.save(Member.builder()
+                .email(createMemberRequest.email())
+                .nickName(createMemberRequest.nickName())
+                .password(passwordEncoder.encode(createMemberRequest.password()))
+                .birth(createMemberRequest.birth())
+                .profileUrl(imageUrl)
+                .height(createMemberRequest.height())
+                .weight(createMemberRequest.weight())
+                .build());
+
+        // 저장
+        return saveMember.getUserId();
     }
+
 
     // 이메일 중복 확인
     public boolean isEmailTaken(String email) {
-        logger.info("Checking if email is taken: {}", email);
-        return memberRepository.findByEmail(email).isPresent();
+        log.info("Checking if email is taken: {}", email);
+        return memberRepository.existsByEmail(email);
     }
 
+
+    // 닉네임 중복 확인
+    public boolean isNickNameTaken(String nickname) {
+        log.info("Checking if nickname is taken: {}", nickname);
+        return memberRepository.existsByNickName(nickname);
+    }
+
+    
+    // 로그인
+    public String login(LoginRequest loginRequest) {
+
+        // 이메일 조회
+        Member member = memberRepository.findByEmail(loginRequest.email())
+                .orElseThrow(() -> new NotFoundException("존재하지 않는 회원입니다."));
+
+        // 비밀번호 검증
+        if (!passwordEncoder.matches(loginRequest.password(), member.getPassword())) {
+            throw new CustomBaseException(PASSWORD_INVALID);
+        }
+
+        // JWT 토큰 생성
+        return jwtProvider.createToken(member.getEmail(), member.getUserId(), String.valueOf(member.getRole()));
+    }
 }
