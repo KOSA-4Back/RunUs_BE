@@ -1,22 +1,32 @@
 package com.fourback.runus.domains.member.controller;
 
-import com.fourback.runus.domains.member.dto.requeset.CreateMemberRequest;
-import com.fourback.runus.domains.member.dto.requeset.LoginRequest;
-import com.fourback.runus.domains.member.service.MemberService;
-import com.fourback.runus.global.error.errorCode.ResponseCode;
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import static com.fourback.runus.global.error.errorCode.ResponseCode.EXISTS_EMAIL;
+import static com.fourback.runus.global.error.errorCode.ResponseCode.EXISTS_NICKNAME;
+import static com.fourback.runus.global.error.errorCode.ResponseCode.MEMBER_CREATED;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.fourback.runus.global.error.errorCode.ResponseCode.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.fourback.runus.domains.member.dto.requeset.CreateMemberRequest;
+import com.fourback.runus.domains.member.dto.requeset.LoginRequest;
+import com.fourback.runus.domains.member.service.MemberService;
+import com.fourback.runus.global.error.errorCode.ResponseCode;
+
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 @RestController

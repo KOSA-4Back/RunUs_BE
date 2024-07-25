@@ -1,8 +1,8 @@
 package com.fourback.runus.domains.member.dto.requeset;
 
-import jakarta.validation.constraints.NotEmpty;
-
 import java.time.LocalDate;
+
+import jakarta.validation.constraints.NotEmpty;
 
 /**
  * packageName    : com.fourback.runus.member.dto.requeset
@@ -16,8 +16,6 @@ import java.time.LocalDate;
  * 2024-07-22        Yeong-Huns       최초 생성
  */
 public record UpdateMemberRequest(
-        @NotEmpty
-        long userId,
         @NotEmpty
         String nickName,
         @NotEmpty

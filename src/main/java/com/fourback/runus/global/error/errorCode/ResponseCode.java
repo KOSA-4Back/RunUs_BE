@@ -1,10 +1,12 @@
 package com.fourback.runus.global.error.errorCode;
 
+import org.springframework.http.HttpStatus;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonValue;
+
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 
 /**
  * packageName    : org.omsf.error.code
@@ -35,6 +37,7 @@ public enum ResponseCode {
     PASSWORD_INVALID(HttpStatus.BAD_REQUEST, "D93", "비밀번호가 올바르지 않습니다."),
     EXISTS_EMAIL(HttpStatus.CONFLICT, "D95", "이미 존재하는 이메일입니다."),
     EXISTS_NICKNAME(HttpStatus.CONFLICT, "D96", "이미 존재하는 닉네임입니다."),
+    UNAUTHORIZED_ACTION(HttpStatus.UNAUTHORIZED, "D97", "허가되지 않은 행동입니다."),
 
     // User
     ALREADY_EXIST(HttpStatus.BAD_REQUEST, "D94", "이미 존재하는 사용자입니다."),
@@ -53,7 +56,7 @@ public enum ResponseCode {
     // 커스텀 예외 생성시 code 90번부터 지정 -> ex) REQUIRE_MORE_COFFEE(HttpStatus.SERVICE_UNAVAILABLE, "E90", "더 많은 커피가 필요합니다.")
     REQUIRE_MORE_COFFEE(HttpStatus.SERVICE_UNAVAILABLE, "E90", "커피가 부족 합니다.")
     ;
-
+	
     private final HttpStatus status;
     private final String code;
     private final String message;
