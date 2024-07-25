@@ -1,9 +1,8 @@
 package com.fourback.runus.domains.running.entity;
 
-import java.sql.Date;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -29,15 +28,17 @@ public class RunTotalInfos {
     private LocalDateTime endTime;
     private long totalDistance;
     private long totalCalories;
+    private String totalTime;
     private LocalDateTime deletedAt;
 
     @Builder
-    public RunTotalInfos(long userId, long todayGoalId, LocalDateTime startTime, LocalDateTime endTime, long totalDistance, long totalCalories) {
+    public RunTotalInfos(long userId, long todayGoalId, LocalDateTime startTime, LocalDateTime endTime, long totalDistance, long totalCalories, String totalTime) {
         this.userId = userId;
         this.todayGoalId = todayGoalId;
         this.startTime = startTime;
         this.endTime = endTime;
         this.totalDistance = totalDistance;
         this.totalCalories = totalCalories;
+        this.totalTime = totalTime;
     }
 }

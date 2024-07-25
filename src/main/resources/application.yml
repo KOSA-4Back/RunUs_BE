@@ -42,6 +42,8 @@ logging:
   level:
     root: INFO
     com.fourback: DEBUG
+    
+    
 
     
 jwt:
