@@ -40,8 +40,8 @@ spring:
 
 logging:
   level:
-    root: info
-    com.fourback: debug
+    root: INFO
+    com.fourback: DEBUG
 
     
 jwt:

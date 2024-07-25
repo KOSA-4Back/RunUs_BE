@@ -35,4 +35,8 @@ public class TodayGoal {
         this.today = LocalDate.now();
         this.registedAt = LocalDateTime.now();
     }
+    
+    public void changeGoalKm(long goalKm) {
+    	this.goalKm = goalKm;
+    }
 }
