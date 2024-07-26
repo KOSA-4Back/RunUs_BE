@@ -7,6 +7,8 @@ import static com.fourback.runus.global.error.errorCode.ResponseCode.MEMBER_CREA
 import java.util.HashMap;
 import java.util.Map;
 
+import com.fourback.runus.global.redis.dto.GetTokenResponse;
+import com.fourback.runus.global.redis.service.RedisAuthHandler;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -39,6 +41,7 @@ public class AuthController {
     private final MemberService memberService;
     private final AuthService authService;
     private final EmailService emailService;
+    private final RedisAuthHandler redisAuthHandler;
 
 
     // 회원가입
@@ -63,10 +66,13 @@ public class AuthController {
     public ResponseEntity<Object> login(@RequestBody LoginRequest loginRequest) {
 
         log.info("====>>>>>>>>>> into login");
-        String token = memberService.login(loginRequest);
+        GetTokenResponse tokenResponse = memberService.login(loginRequest);
+        long userId = tokenResponse.userId();
+        String token = tokenResponse.token();
         Map<String, String> response = new HashMap<>();
         response.put("Token", token);
 
+        redisAuthHandler.login(userId, token); // 레디스 저장
         return ResponseEntity.ok(response);
     }
 
