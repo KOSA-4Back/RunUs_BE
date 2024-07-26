@@ -115,7 +115,7 @@ public class AuthController {
             emailService.sendTemporaryPassword(email, tempPassword);
             log.info("Temporary password sent to email: {}", email);
 
-            return ResponseEntity.ok("Temporary password sent to your email.");
+            return ResponseEntity.ok("Verify-code sent to your email.");
 
         } catch (Exception e) {
             log.error("Error processing forgot password for email: {}", email, e);
