@@ -41,7 +41,7 @@ public class AuthController {
     private final MemberService memberService;
     private final AuthService authService;
     private final EmailService emailService;
-    private final RedisAuthHandler redisAuthHandler;
+    private final RedisAuthHandler redisAuthHandler; //레디스 저장을 위한 주입 by Yh
 
 
     // 회원가입

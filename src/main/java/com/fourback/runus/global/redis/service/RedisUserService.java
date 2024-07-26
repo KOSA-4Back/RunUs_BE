@@ -1,5 +1,6 @@
 package com.fourback.runus.global.redis.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -16,9 +17,10 @@ import java.time.Duration;
  * -----------------------------------------------------------
  * 2024-07-26        Yeong-Huns       최초 생성
  */
+@RequiredArgsConstructor
 @Service
 public class RedisUserService {
-    private RedisTemplate<String, Object> redisTemplate;
+    private final RedisTemplate<String, Object> redisTemplate;
 
     public void saveUserSession(long userId, String token){
         String key = "member:"+userId;
@@ -41,7 +43,7 @@ public class RedisUserService {
         redisTemplate.opsForHash().put("member:"+userId, connectionStatus, connectionStatus ? "true" : "false");
     }
 
-    public void deleteUserSession(String userId){
+    public void deleteUserSession(long userId){
         redisTemplate.delete("member:"+userId);
     }
 

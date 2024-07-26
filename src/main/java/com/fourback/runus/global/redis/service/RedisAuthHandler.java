@@ -23,7 +23,7 @@ public class RedisAuthHandler {
         redisUserService.saveUserSession(userId, token);
     }
 
-    public void logout(String userId){
+    public void logout(long userId){
         redisUserService.deleteUserSession(userId);
     }
 
