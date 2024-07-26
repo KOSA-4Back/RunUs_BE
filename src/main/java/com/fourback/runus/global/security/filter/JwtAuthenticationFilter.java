@@ -1,15 +1,10 @@
 package com.fourback.runus.global.security.filter;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fourback.runus.global.error.errorCode.ResponseCode;
-import com.fourback.runus.global.error.response.ErrorResponse;
-import com.fourback.runus.global.security.provider.JwtProvider;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,10 +13,17 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fourback.runus.global.error.errorCode.ResponseCode;
+import com.fourback.runus.global.error.response.ErrorResponse;
+import com.fourback.runus.global.security.provider.JwtProvider;
+
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 @Component
@@ -75,7 +77,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
 
-        String[] api = {"/api/auth/register", "/api/auth/login", "/api/auth/forgot-password"};
+        String[] api = {"/api/auth/register", "/api/auth/login", 
+        		"/api/auth/forgot-password", "/api/auth/verify-code",
+        		"/api/auth/change-password"};
 
         String path = request.getRequestURI();
         return Arrays.stream(api).anyMatch(path::startsWith);

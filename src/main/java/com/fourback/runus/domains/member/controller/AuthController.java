@@ -7,7 +7,6 @@ import static com.fourback.runus.global.error.errorCode.ResponseCode.MEMBER_CREA
 import java.util.HashMap;
 import java.util.Map;
 
-import com.fourback.runus.domains.member.service.EmailService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +21,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fourback.runus.domains.member.dto.requeset.CreateMemberRequest;
 import com.fourback.runus.domains.member.dto.requeset.LoginRequest;
+import com.fourback.runus.domains.member.service.AuthService;
+import com.fourback.runus.domains.member.service.EmailService;
 import com.fourback.runus.domains.member.service.MemberService;
 import com.fourback.runus.global.error.errorCode.ResponseCode;
 
@@ -36,6 +37,7 @@ import lombok.extern.log4j.Log4j2;
 public class AuthController {
 
     private final MemberService memberService;
+    private final AuthService authService;
     private final EmailService emailService;
 
 
@@ -107,8 +109,9 @@ public class AuthController {
         String email = request.get("email");
         log.info("====>>>>>>>>>> Forgot password endpoint called with email: {}", email);
         try {
-            String tempPassword = memberService.generateTemporaryPassword();
-            memberService.updatePassword(email, tempPassword);
+            // 인증번호 생성 및 저장
+            String tempPassword = authService.generateAndSaveVerificationCode(email);
+            // 인증번호 이메일로 발송
             emailService.sendTemporaryPassword(email, tempPassword);
             log.info("Temporary password sent to email: {}", email);
 
@@ -117,6 +120,36 @@ public class AuthController {
         } catch (Exception e) {
             log.error("Error processing forgot password for email: {}", email, e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error processing request.");
+        }
+    }
+
+    // 인증번호 확인
+    @PostMapping("/verify-code")
+    public ResponseEntity<String> verifyCode(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
+        String code = request.get("code");
+        log.info("Verify code endpoint called with email: {} and code: {}", email, code);
+        boolean isValid = authService.verifyCode(email, code);
+        if (isValid) {
+            authService.deleteVerificationCode(email);
+            return ResponseEntity.ok("Verification successful.");
+        } else {
+            return ResponseEntity.status(400).body("Invalid verification code.");
+        }
+    }
+    
+    
+    @PostMapping("/change-password")
+    public ResponseEntity<String> changePassword(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
+        String newPassword = request.get("newPassword");
+        log.info("Change password endpoint called with email: {}", email);
+        try {
+            authService.changePassword(email, newPassword);
+            return ResponseEntity.ok("Password changed successfully.");
+        } catch (Exception e) {
+            log.error("Error changing password for email: {}", email, e);
+            return ResponseEntity.status(500).body("Error changing password.");
         }
     }
 }

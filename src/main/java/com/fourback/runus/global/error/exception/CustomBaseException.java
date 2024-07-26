@@ -1,6 +1,7 @@
 package com.fourback.runus.global.error.exception;
 
 import com.fourback.runus.global.error.errorCode.ResponseCode;
+
 import lombok.Getter;
 
 /**
@@ -26,5 +27,10 @@ public class CustomBaseException extends RuntimeException{
     public CustomBaseException(ResponseCode responseCode) {
         super(responseCode.getMessage());
         this.responseCode = responseCode;
+    }
+    
+    public CustomBaseException(String message) {
+        super(message);
+        this.responseCode = ResponseCode.INTERNAL_SERVER_ERROR;
     }
 }
