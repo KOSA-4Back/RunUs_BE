@@ -75,7 +75,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
 
-        String[] api = {"/api/auth/register", "/api/auth/login"};
+        String[] api = {"/api/auth/register", "/api/auth/login", "/api/auth/forgot-password"};
 
         String path = request.getRequestURI();
         return Arrays.stream(api).anyMatch(path::startsWith);

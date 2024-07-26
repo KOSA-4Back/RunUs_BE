@@ -7,6 +7,7 @@ import static com.fourback.runus.global.error.errorCode.ResponseCode.MEMBER_CREA
 import java.util.HashMap;
 import java.util.Map;
 
+import com.fourback.runus.domains.member.service.EmailService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +36,7 @@ import lombok.extern.log4j.Log4j2;
 public class AuthController {
 
     private final MemberService memberService;
+    private final EmailService emailService;
 
 
     // 회원가입
@@ -95,6 +97,26 @@ public class AuthController {
 
         } else {
             return ResponseEntity.ok().body(isTaken);
+        }
+    }
+
+
+    // 비밀번호 찾기
+    @PostMapping("/forgot-password")
+    public ResponseEntity<String> forgotPassword(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
+        log.info("====>>>>>>>>>> Forgot password endpoint called with email: {}", email);
+        try {
+            String tempPassword = memberService.generateTemporaryPassword();
+            memberService.updatePassword(email, tempPassword);
+            emailService.sendTemporaryPassword(email, tempPassword);
+            log.info("Temporary password sent to email: {}", email);
+
+            return ResponseEntity.ok("Temporary password sent to your email.");
+
+        } catch (Exception e) {
+            log.error("Error processing forgot password for email: {}", email, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error processing request.");
         }
     }
 }

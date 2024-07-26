@@ -36,7 +36,7 @@ spring:
     host: localhost
     port: 5672
     username: guest
-    password: guest  
+    password: guest
 
 logging:
   level:
@@ -47,5 +47,3 @@ logging:
 jwt:
   secret: a29zYS1wcm9qZWN0LTNuZC1Gb3VyQmFjay1SdW5Vcy1Qcm9qZWN0
   expiration: 1800000  # 30분
-
-
