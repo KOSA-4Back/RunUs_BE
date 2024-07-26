@@ -11,7 +11,9 @@ Content-Type: application/json
   "weight": 72
 }
 ### 메인 서버에서 전체 Member 검색 (오라클)
-GET http://localhost:8080/member/findAll
+GET http://localhost:8080/api/member/findAll
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJldW5qdW5na2ltMTAwNEBuYXZlci5jb20iLCJ1c2VySWQiOjIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzIxOTAyNDQ0LCJleHAiOjE3MjE5MDQyNDR9.ru-TKGP9EIdoGN64C-HrRrRuC_TYgwtHVlul03V1w_g
 
 ### 채팅 서버 Mongo DB 전체 조회
 GET http://localhost:8081/member/findAll
