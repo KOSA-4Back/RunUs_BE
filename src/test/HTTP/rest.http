@@ -68,3 +68,42 @@ DELETE http://localhost:8080/member/deleteById/{{deleteID}}
 
 ### 전체 소프트 DELETE
 DELETE http://localhost:8080/member/deleteAll
+
+
+### 회원가입 요청 (memberId 가 data 에 담기는거 확인가능)
+POST http://localhost:8080/api/auth/register
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary 제이슨 데이터
+Content-Disposition: form-data; name="form"; filename="blob"
+Content-Type: application/json
+
+{
+  "email": "onlyEnglishPrimay@example.com",
+  "nickName": "tonic",
+  "password": "password123",
+  "birth": "1990-01-01",
+  "height": 180,
+  "weight": 75
+}
+--boundary 폼 데이터(사진)
+Content-Disposition: form-data; name="file"; filename="testfile.txt"
+Content-Type: text/plain
+
+테스트 파일입니다.
+--boundary--
+
+### 로그인 요청
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "onlyEnglishPrimay@example.com",
+  "password": "password123"
+}
+
+### 로그아웃 / 토큰 파기 테스트 (로그인 토큰 " " 쌍따옴표 꼭 뺴주세요)
+@login_token = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QGV4YW1wbGUuY29tIiwidXNlcklkIjoxLCJyb2xlIjoiVVNFUiIsImlhdCI6MTcyMjAxMDg5MywiZXhwIjoxNzIyMDEyNjkzfQ.rS4Mmvw0Mu2KBgZur-MtuQSNOW7gjQn2LcVDgkJTmW4
+POST localhost:8080/api/auth/logout
+Content-Type: application/json
+Authorization: Bearer {{login_token}}

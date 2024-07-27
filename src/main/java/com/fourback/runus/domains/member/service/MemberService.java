@@ -1,16 +1,5 @@
 package com.fourback.runus.domains.member.service;
 
-import static com.fourback.runus.global.error.errorCode.ResponseCode.PASSWORD_INVALID;
-
-import java.util.List;
-
-import org.apache.commons.lang3.RandomStringUtils;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.fourback.runus.domains.member.domain.Member;
 import com.fourback.runus.domains.member.dto.requeset.CreateMemberRequest;
 import com.fourback.runus.domains.member.dto.requeset.LoginRequest;
@@ -19,11 +8,21 @@ import com.fourback.runus.domains.member.dto.response.FindMembersResponse;
 import com.fourback.runus.domains.member.repository.MemberRepository;
 import com.fourback.runus.global.error.exception.CustomBaseException;
 import com.fourback.runus.global.error.exception.NotFoundException;
+import com.fourback.runus.global.redis.dto.GetTokenResponse;
 import com.fourback.runus.global.security.provider.JwtProvider;
 import com.fourback.runus.global.service.S3Service;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
+
+import static com.fourback.runus.global.error.errorCode.ResponseCode.PASSWORD_INVALID;
 
 /**
  * packageName    : com.fourback.runus.member.service
@@ -138,7 +137,7 @@ public class MemberService {
 
     
     // 로그인
-    public String login(LoginRequest loginRequest) {
+    public GetTokenResponse login(LoginRequest loginRequest) {
 
         // 이메일 조회
         Member member = memberRepository.findByEmail(loginRequest.email())
@@ -150,7 +149,8 @@ public class MemberService {
         }
 
         // JWT 토큰 생성
-        return jwtProvider.createToken(member.getEmail(), member.getUserId(), String.valueOf(member.getRole()));
+        String jwtToken = jwtProvider.createToken(member.getEmail(), member.getUserId(), String.valueOf(member.getRole()));
+        return GetTokenResponse.of(member.getUserId(), jwtToken);
     }
     
     

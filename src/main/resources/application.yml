@@ -29,7 +29,7 @@ spring:
       max-request-size: 2MB
 
   config:
-    import: application-db.yml, application-security.yml
+    import: application-db.yml, application-security.yml, application-redis.yml
 
   # RabbitMQ
   rabbitmq:

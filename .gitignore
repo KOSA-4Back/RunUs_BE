@@ -211,3 +211,5 @@ src/main/resources/application-db.yml
 src/main/resources/application-security.yml
 
 # End of https://www.toptal.com/developers/gitignore/api/windows,intellij,netbeans,visualstudiocode,gradle
+runus_ddl-9.sql
+application-redis.yml
