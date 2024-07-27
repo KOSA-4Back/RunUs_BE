@@ -1,4 +1,4 @@
-package com.fourback.runus.global.service;
+package com.fourback.runus.global.amazon.service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
@@ -18,6 +18,18 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.UUID;
 
+
+/**
+ * packageName    : com.fourback.runus.global.amazon.service
+ * fileName       : S3Service
+ * author         : 김은정
+ * date           : 2024-07-22
+ * description    :
+ * ===========================================================
+ * DATE              AUTHOR             NOTE
+ * -----------------------------------------------------------
+ * 2024-07-22        김은정            최초 생성
+ */
 @Log4j2
 @Service
 @RequiredArgsConstructor
@@ -34,9 +46,6 @@ public class S3Service {
 
     public String uploadFile(MultipartFile multipartFile) {
 
-        // 폴더명
-        String uploadFilePath = getFolderName();
-        
         // 파일명
         String originalFileName = multipartFile.getOriginalFilename();
         String uploadFileName = getUuidFileName(Objects.requireNonNull(originalFileName));
@@ -49,7 +58,7 @@ public class S3Service {
         // AWS S3에 저장
         try (InputStream inputStream = multipartFile.getInputStream()) {
 
-            String keyName = uploadFilePath + "/" + uploadFileName; // ex) 구분/년/월/일/파일.확장자
+            String keyName = dir + "/" + uploadFileName; // ex) /구분/파일.확장자
 
             // S3에 폴더 및 파일 업로드
             amazonS3.putObject(
@@ -67,16 +76,6 @@ public class S3Service {
     }
 
     
-    // 폴더명 생성 (2024/07/23)
-    private String getFolderName() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        Date date = new Date();
-        String str = sdf.format(date);
-
-        return str.replace("-", "/");
-    }
-
-    
     // 파일명 생성 (UUID)
     public String getUuidFileName(String fileName) {
         String ext = fileName.substring(fileName.indexOf(".") + 1);
@@ -89,9 +88,12 @@ public class S3Service {
     public String updateFile(MultipartFile file, String existingFileName) throws IOException {
         String key = dir + "/" + existingFileName;
 
+        ObjectMetadata objectMetadata = new ObjectMetadata();
+        objectMetadata.setContentLength(file.getSize());
+        objectMetadata.setContentType(file.getContentType());
+
         // S3에 파일 업로드 (기존 파일 덮어쓰기)
-        amazonS3.putObject(new PutObjectRequest(bucket, key, file.getInputStream(), null)
-                .withCannedAcl(CannedAccessControlList.PublicRead));
+        amazonS3.putObject(new PutObjectRequest(bucket, key, file.getInputStream(), objectMetadata));
 
         // 업로드된 파일의 URL 반환
         return amazonS3.getUrl(bucket, key).toString();

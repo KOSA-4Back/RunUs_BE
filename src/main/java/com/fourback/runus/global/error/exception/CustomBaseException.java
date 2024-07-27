@@ -14,6 +14,7 @@ import lombok.Getter;
  * DATE              AUTHOR             NOTE
  * -----------------------------------------------------------
  * 2024-06-18        Yeong-Huns       최초 생성
+ * 2024-06-26        김민지            CustomBaseException() 메서드 추가
  */
 @Getter
 public class CustomBaseException extends RuntimeException{

@@ -13,6 +13,18 @@ import com.fourback.runus.global.error.exception.CustomBaseException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
+
+/**
+ * packageName    : com.fourback.runus.domains.member.service
+ * fileName       : AuthService
+ * author         : 김민지
+ * date           : 2024-07-26
+ * description    :
+ * ===========================================================
+ * DATE              AUTHOR             NOTE
+ * -----------------------------------------------------------
+ * 2024-07-26        김민지              최초 생성
+ */
 @Service
 @RequiredArgsConstructor
 @Log4j2
@@ -52,10 +64,13 @@ public class AuthService {
         verificationCodeRepository.deleteByEmail(email);
     }
     
+    
+    // 비밀번호 변경
     @Transactional
     public void changePassword(String email, String newPassword) {
         var member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new CustomBaseException("User not found with email: " + email));
+
         member.setPassword(passwordEncoder.encode(newPassword));
         memberRepository.save(member);
     }

@@ -14,6 +14,20 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfigurationSource;
 
+
+/**
+ * packageName    : com.fourback.runus.global.security.config
+ * fileName       : SecurityConfig
+ * author         : 김민지
+ * date           : 2024-07-22
+ * description    :
+ * ===========================================================
+ * DATE              AUTHOR             NOTE
+ * -----------------------------------------------------------
+ * 2024-07-22        김민지            최초 생성
+ * 2024-07-24        김은정            수정, 암호화 추가
+ * 2024-07-26        김영훈            로그아웃 추가
+ */
 @Log4j2
 @Configuration
 @EnableWebSecurity

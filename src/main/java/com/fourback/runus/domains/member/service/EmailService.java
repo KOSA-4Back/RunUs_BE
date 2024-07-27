@@ -7,6 +7,19 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+
+/**
+ * packageName    : com.fourback.runus.domains.member.service
+ * fileName       : EmailService
+ * author         : 김민지
+ * date           : 2024-07-25
+ * description    :
+ * ===========================================================
+ * DATE              AUTHOR             NOTE
+ * -----------------------------------------------------------
+ * 2024-07-25        김민지              최초 생성
+ * 2024-07-26        김은정              @RequiredArgsConstructor 추가
+ */
 @Service
 @RequiredArgsConstructor
 public class EmailService {

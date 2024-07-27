@@ -16,6 +16,7 @@ spring:
         dialect: org.hibernate.dialect.OracleDialect  # Hibernate Dialect 설정 추가
         show_sql: true
         format_sql: true
+        default_batch_fetch_size: 100
 
   mvc:
     pathmatch:
@@ -46,4 +47,4 @@ logging:
     
 jwt:
   secret: a29zYS1wcm9qZWN0LTNuZC1Gb3VyQmFjay1SdW5Vcy1Qcm9qZWN0
-  expiration: 1800000  # 30분
+  expiration: 86400000  # 24시간

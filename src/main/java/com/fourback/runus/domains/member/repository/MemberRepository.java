@@ -22,6 +22,8 @@ import java.util.Optional;
  * DATE              AUTHOR             NOTE
  * -----------------------------------------------------------
  * 2024-07-22        Yeong-Huns       최초 생성
+ * 2024-07-22        김민지            조회 (이메일 기준) 메서드 생성
+ * 2024-07-24        김은정            이메일 체크, 닉네임 체크 메서드 수정
  */
 public interface MemberRepository extends JpaRepository<Member, Long> {
     @Query("SELECT m FROM Member m WHERE m.deletedAt IS NULL")

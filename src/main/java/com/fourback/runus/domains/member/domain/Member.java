@@ -2,9 +2,8 @@ package com.fourback.runus.domains.member.domain;
 
 import com.fourback.runus.domains.member.dto.requeset.UpdateMemberRequest;
 import com.fourback.runus.domains.member.enumerate.MemberRole;
-import com.fourback.runus.domains.running.entity.TodayGoal;
+import com.fourback.runus.domains.running.domain.TodayGoal;
 import com.fourback.runus.global.audit.entity.BaseTimeEntity;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -14,18 +13,17 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
- * packageName    : com.fourback.runus.member.repository
+ * packageName    : com.fourback.runus.member.domain
  * fileName       : Member
  * author         : Yeong-Huns
  * date           : 2024-07-22
@@ -34,9 +32,11 @@ import lombok.NoArgsConstructor;
  * DATE              AUTHOR             NOTE
  * -----------------------------------------------------------
  * 2024-07-22        Yeong-Huns       최초 생성
+ * 2024-07-24        김은정            TodayGoal 엔티티 연관관계 설정/Member 설정 시 profileUrl 추가
  */
-@Data
 @Entity
+@Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "members")
 public class Member extends BaseTimeEntity {
@@ -76,18 +76,14 @@ public class Member extends BaseTimeEntity {
         this.role = MemberRole.USER;
     }
 
-    public Member updateMemberInfo(UpdateMemberRequest request) {
+    public void updateMemberInfo(UpdateMemberRequest request, String profileUrl) {
         this.nickName = request.nickName();
         this.birth = request.birth();
+        this.profileUrl = profileUrl;
         this.height = request.height();
         this.weight = request.weight();
-        return this;
     }
 
-    public Member updateProfileUrl(String profileUrl) {
-        this.profileUrl = profileUrl;
-        return this;
-    }
 
     public Member changeRoleToAdmin() {
         this.role = MemberRole.ADMIN;
