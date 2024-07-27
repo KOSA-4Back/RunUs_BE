@@ -1,33 +1,21 @@
 package com.fourback.runus.domains.running.dto.request;
 
-
-import java.time.LocalDateTime;
-
-import com.fourback.runus.domains.running.entity.RunTotalInfos;
-
-import jakarta.persistence.Column;
-import lombok.Builder;
-
-@Builder
-public class EndRunningRequest {
-    
-    private long todayGoalId;
-    private long userId;
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
-    private long totalDistance;
-    private long totalCalories;
-    private String totalTime;
-
-    public RunTotalInfos toEntity() {
-        return RunTotalInfos.builder()  
-                        .todayGoalId(todayGoalId)
-                        .userId(userId)
-                        .startTime(startTime)
-                        .endTime(endTime)
-                        .totalDistance(totalDistance)
-                        .totalCalories(totalCalories)
-                        .totalTime(totalTime)
-                        .build();  
-    }
+/**
+ * packageName    : com.fourback.runus.domains.running.dto.request
+ * fileName       : EndRunningRequest
+ * author         : 강희원
+ * date           : 2024-07-23
+ * description    :
+ * ===========================================================
+ * DATE              AUTHOR             NOTE
+ * -----------------------------------------------------------
+ * 2024-07-23        강희원            최초 생성
+ * 2024-07-26        김은정            id 성 long -> Long 수정
+ */
+public record EndRunningRequest(
+        Long totalInfoId,
+        Long userId,
+        long totalDistance,
+        long totalCalories
+) {
 }

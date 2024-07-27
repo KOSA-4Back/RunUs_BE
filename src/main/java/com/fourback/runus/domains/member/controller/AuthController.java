@@ -4,6 +4,7 @@ import static com.fourback.runus.global.error.errorCode.ResponseCode.EXISTS_EMAI
 import static com.fourback.runus.global.error.errorCode.ResponseCode.EXISTS_NICKNAME;
 import static com.fourback.runus.global.error.errorCode.ResponseCode.MEMBER_CREATED;
 
+import com.fourback.runus.domains.member.dto.requeset.AuthChangePasswordRequest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,6 +34,21 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
+/**
+ * packageName    : com.fourback.runus.domains.member.controller
+ * fileName       : AuthController
+ * author         : 김민지
+ * date           : 2024-07-22
+ * description    :
+ * ===========================================================
+ * DATE              AUTHOR             NOTE
+ * -----------------------------------------------------------
+ * 2024-07-22        김민지            최초 생성
+ * 2024-07-24        김은정            로그인/회원가입 관련 메서드 수정
+ * 2024-07-24        김민지            회원 정보 수정 및 비밀번호 찾기/변경 메서드 생성 및 수정
+ * 2024-07-26        김은정            회원 정보 수정 및 비밀번호 변경 메서드 수정
+ * 2024-07-26        김영훈            로그인 시 redis에 저장되게 수정
+ */
 @Log4j2
 @RestController
 @RequestMapping("/api/auth")
@@ -129,6 +146,7 @@ public class AuthController {
         }
     }
 
+
     // 인증번호 확인
     @PostMapping("/verify-code")
     public ResponseEntity<String> verifyCode(@RequestBody Map<String, String> request) {
@@ -145,17 +163,15 @@ public class AuthController {
     }
     
     
-    @PostMapping("/change-password")
-    public ResponseEntity<String> changePassword(@RequestBody Map<String, String> request) {
-        String email = request.get("email");
-        String newPassword = request.get("newPassword");
+    // 로그인 화면의 비밀번호 찾기 후 변경
+    @PutMapping("/change-password")
+    public ResponseEntity<String> changePassword(@RequestBody AuthChangePasswordRequest authChangePasswordRequest) {
+        String email = authChangePasswordRequest.email();
+        String newPassword = authChangePasswordRequest.changePassword();
+
         log.info("Change password endpoint called with email: {}", email);
-        try {
-            authService.changePassword(email, newPassword);
-            return ResponseEntity.ok("Password changed successfully.");
-        } catch (Exception e) {
-            log.error("Error changing password for email: {}", email, e);
-            return ResponseEntity.status(500).body("Error changing password.");
-        }
+        authService.changePassword(email, newPassword);
+
+        return ResponseEntity.ok("비밀번호가 변경되었습니다.");
     }
 }

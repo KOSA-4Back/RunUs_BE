@@ -9,15 +9,17 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 /**
- * packageName    : org.omsf.error.code
- * fileName       : ErrorCode
+ * packageName    : com.fourback.runus.global.error.errorCode
+ * fileName       : ResponseCode
  * author         : Yeong-Huns
- * date           : 2024-06-18
+ * date           : 2024-07-22
  * description    :
  * ===========================================================
  * DATE              AUTHOR             NOTE
  * -----------------------------------------------------------
- * 2024-06-18        Yeong-Huns       최초 생성
+ * 2024-07-22        Yeong-Huns       최초 생성
+ * 2024-07-24        김은정            Object data 추가
+ * 2024-07-26        김은정            running 관련 메시지 추가
  */
 @Getter
 @RequiredArgsConstructor
@@ -29,6 +31,9 @@ public enum ResponseCode {
     MEMBER_UPDATED(HttpStatus.OK, "B00", "수정 완료"),
     MEMBER_DELETED(HttpStatus.OK, "B00", "회원님의 정보가 무사히 삭제되었습니다."),
     MEMBER_ALL_DELETED(HttpStatus.OK, "B00", "모든 회원의 데이터가 삭제 되었습니다."),
+    // running
+    RUN_START(HttpStatus.OK, "B00", "런닝이 시작되었습니다."),
+    RUN_END(HttpStatus.OK, "B00", "런닝이 끝났습니다."),
 
     // Auth
     USER_NOT_FOUND(HttpStatus.UNAUTHORIZED, "D90", "인증 정보가 없는 요청입니다"),

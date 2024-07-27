@@ -9,6 +9,18 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+
+/**
+ * packageName    : com.fourback.runus.global.amazon.config
+ * fileName       : S3Config
+ * author         : 김은정
+ * date           : 2024-07-22
+ * description    :
+ * ===========================================================
+ * DATE              AUTHOR             NOTE
+ * -----------------------------------------------------------
+ * 2024-07-22        김은정            최초 생성
+ */
 @Log4j2
 @Configuration
 public class S3Config {

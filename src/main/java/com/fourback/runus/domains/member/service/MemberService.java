@@ -1,8 +1,11 @@
 package com.fourback.runus.domains.member.service;
 
+import static com.fourback.runus.global.error.errorCode.ResponseCode.PASSWORD_INVALID;
+
 import com.fourback.runus.domains.member.domain.Member;
 import com.fourback.runus.domains.member.dto.requeset.CreateMemberRequest;
 import com.fourback.runus.domains.member.dto.requeset.LoginRequest;
+import com.fourback.runus.domains.member.dto.requeset.MemberChangePasswordRequest;
 import com.fourback.runus.domains.member.dto.requeset.UpdateMemberRequest;
 import com.fourback.runus.domains.member.dto.response.FindMembersResponse;
 import com.fourback.runus.domains.member.repository.MemberRepository;
@@ -10,19 +13,16 @@ import com.fourback.runus.global.error.exception.CustomBaseException;
 import com.fourback.runus.global.error.exception.NotFoundException;
 import com.fourback.runus.global.redis.dto.GetTokenResponse;
 import com.fourback.runus.global.security.provider.JwtProvider;
-import com.fourback.runus.global.service.S3Service;
+import com.fourback.runus.global.amazon.service.S3Service;
+import java.io.IOException;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
-
-import static com.fourback.runus.global.error.errorCode.ResponseCode.PASSWORD_INVALID;
 
 /**
  * packageName    : com.fourback.runus.member.service
@@ -34,17 +34,20 @@ import static com.fourback.runus.global.error.errorCode.ResponseCode.PASSWORD_IN
  * DATE              AUTHOR             NOTE
  * -----------------------------------------------------------
  * 2024-07-22        Yeong-Huns       최초 생성
+ * 2024-07-22        김민지            회원가입/로그인 기능 구현
+ * 2024-07-24        김은정            회원가입/로그인 기능 메서드 수정
+ * 2024-07-26        김은정            회원정보 수정 메서드 수정
+ * 2024-07-26        김영훈            로그인시 반환값 수정
  */
 @Log4j2
 @Service
 @RequiredArgsConstructor
 public class MemberService {
-	
+
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     private final S3Service s3Service;
     private final JwtProvider jwtProvider;
-
 
 
     @Transactional
@@ -55,9 +58,9 @@ public class MemberService {
     @Transactional(readOnly = true)
     public List<FindMembersResponse> findAll() {
         return memberRepository.findAllActiveMembers()
-                .stream()
-                .map(FindMembersResponse::from)
-                .toList();
+            .stream()
+            .map(FindMembersResponse::from)
+            .toList();
     }
 
     @Transactional(readOnly = true)
@@ -85,17 +88,18 @@ public class MemberService {
         memberRepository.deleteAll();
     }
 
-    private Member findById(Long id) {
-        return memberRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Id: " + id + ", 해당 Id의 멤버 조회 실패"));
-    }
 
+    // 조회 (userId 기준)
+    public Member findById(Long id) {
+        return memberRepository.findById(id)
+            .orElseThrow(() -> new NotFoundException("Id: " + id + ", 해당 Id의 멤버 조회 실패"));
+    }
 
 
     // 메인서버 회원가입
     @Transactional
     public Long registerMember(CreateMemberRequest createMemberRequest,
-                               MultipartFile multipartFile) {
+        MultipartFile multipartFile) {
 
         log.info("====>>>>>>>>>> MemberService::registerMember");
 
@@ -108,14 +112,14 @@ public class MemberService {
         }
 
         Member saveMember = memberRepository.save(Member.builder()
-                .email(createMemberRequest.email())
-                .nickName(createMemberRequest.nickName())
-                .password(passwordEncoder.encode(createMemberRequest.password()))
-                .birth(createMemberRequest.birth())
-                .profileUrl(imageUrl)
-                .height(createMemberRequest.height())
-                .weight(createMemberRequest.weight())
-                .build());
+            .email(createMemberRequest.email())
+            .nickName(createMemberRequest.nickName())
+            .password(passwordEncoder.encode(createMemberRequest.password()))
+            .birth(createMemberRequest.birth())
+            .profileUrl(imageUrl)
+            .height(createMemberRequest.height())
+            .weight(createMemberRequest.weight())
+            .build());
 
         // 저장
         return saveMember.getUserId();
@@ -135,13 +139,13 @@ public class MemberService {
         return memberRepository.existsByNickName(nickname);
     }
 
-    
+
     // 로그인
     public GetTokenResponse login(LoginRequest loginRequest) {
 
         // 이메일 조회
         Member member = memberRepository.findByEmail(loginRequest.email())
-                .orElseThrow(() -> new NotFoundException("존재하지 않는 회원입니다."));
+            .orElseThrow(() -> new NotFoundException("존재하지 않는 회원입니다."));
 
         // 비밀번호 검증
         if (!passwordEncoder.matches(loginRequest.password(), member.getPassword())) {
@@ -152,45 +156,65 @@ public class MemberService {
         String jwtToken = jwtProvider.createToken(member.getEmail(), member.getUserId(), String.valueOf(member.getRole()));
         return GetTokenResponse.of(member.getUserId(), jwtToken);
     }
-    
-    
-    // 프로필 정보 수정
-    @Transactional
-    public Member updateMemberInfo(Long userId, UpdateMemberRequest request, MultipartFile multipartFile) {
-        log.info("Updating member info for userId: {}", userId);
-        
-//        Long authenticatedUserId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        if (!authenticatedUserId.equals(request.userId())) {
-//            throw new CustomBaseException(ResponseCode.UNAUTHORIZED_ACTION);
-//        }
-        
-        // 이미지 S3에 저장
-//        String imageUrl = "";
-//        if (multipartFile != null && !multipartFile.isEmpty()) {
-//            imageUrl = s3Service.uploadFile(multipartFile);
-//            log.debug("====>>>>>>>>>> s3Service {}", s3Service.updateFile(multipartFile));
-//
-//        }
 
-        Member member = findById(userId);
+
+    // 회원 정보 수정
+    @Transactional
+    public FindMembersResponse updateMemberInfo(Long userId, UpdateMemberRequest request,
+        MultipartFile multipartFile) {
+        log.info("Updating member info for userId: {}", userId);
+
+        // 기존 멤버 정보 조회 및 존재 여부 확인
+        Member member = memberRepository.findById(userId)
+            .orElseThrow(() -> new NotFoundException("존재하지 않은 유저입니다."));
         log.info("Found member: {}", member);
-        member.updateMemberInfo(request);
+
+        // 이미지 S3에 저장
+        String imageUrl = member.getProfileUrl();
+        if (multipartFile != null && !multipartFile.isEmpty()) {
+            if (imageUrl != null && !imageUrl.isEmpty()) {
+                // 기존 파일 이름 추출
+                String existingFileName = imageUrl.substring(imageUrl.lastIndexOf("/") + 1);
+                try {
+                    imageUrl = s3Service.updateFile(multipartFile, existingFileName);
+
+                } catch (IOException e) {
+                    log.error("Failed to update file", e);
+                    throw new RuntimeException("이미지 업데이트 실패", e);
+                }
+
+            } else {
+                imageUrl = s3Service.uploadFile(multipartFile);
+            }
+
+            log.debug("Updated image URL: {}", imageUrl);
+        }
+
+        // 업데이트된 정보를 반영
+        member.updateMemberInfo(request, imageUrl);
         Member updatedMember = memberRepository.save(member);  // 변경사항 저장
         log.info("Updated member: {}", updatedMember);
-        return updatedMember;
-    }
-    
-    // 인증번호 생성
-    public String generateTemporaryPassword() {
-        return RandomStringUtils.randomAlphanumeric(10);
+
+        return FindMembersResponse.from(member);
     }
 
-    // 비밀 번호 업데이트
+
+    // 비밀번호 변경
     @Transactional
-    public void updatePassword(String email, String tempPassword) {
-        Member member = memberRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
-        member.setPassword(passwordEncoder.encode(tempPassword));
+    public void changePassword(Long userId,
+        MemberChangePasswordRequest memberChangePasswordRequest) {
+
+        // 유저 확인
+        Member member = memberRepository.findById(userId)
+            .orElseThrow(() -> new NotFoundException("존재하지 않은 유저입니다."));
+
+        // 현재 비밀번호 검증
+        if (!passwordEncoder.matches(memberChangePasswordRequest.password(), member.getPassword())) {
+            throw new CustomBaseException(PASSWORD_INVALID);
+        }
+
+        // 비밀번호 변경
+        member.setPassword(passwordEncoder.encode(memberChangePasswordRequest.changePassword()));
         memberRepository.save(member);
     }
 }

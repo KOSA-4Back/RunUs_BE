@@ -27,6 +27,7 @@ import java.nio.file.AccessDeniedException;
  * DATE              AUTHOR             NOTE
  * -----------------------------------------------------------
  * 2024-07-23        Yeong-Huns       최초 생성
+ * 2024-07-24        김은정            handleJwtValidationException() 메서드 추가
  */
 @Slf4j
 @ControllerAdvice(annotations = RestController.class)

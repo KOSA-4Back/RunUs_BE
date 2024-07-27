@@ -7,6 +7,18 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+
+/**
+ * packageName    : com.fourback.runus.global.security.config
+ * fileName       : CorsConfig
+ * author         : 김은정
+ * date           : 2024-07-24
+ * description    :
+ * ===========================================================
+ * DATE              AUTHOR             NOTE
+ * -----------------------------------------------------------
+ * 2024-07-24        김은정            최초 생성
+ */
 @Configuration
 public class CorsConfig {
 

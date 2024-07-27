@@ -7,11 +7,25 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+
+/**
+ * packageName    : com.fourback.runus.domains.member.domain
+ * fileName       : VerificationCode
+ * author         : 김민지
+ * date           : 2024-07-26
+ * description    :
+ * ===========================================================
+ * DATE              AUTHOR             NOTE
+ * -----------------------------------------------------------
+ * 2024-07-26        김민지             최초 생성
+ */
 @Entity
+@Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "verification_codes")
 public class VerificationCode {
