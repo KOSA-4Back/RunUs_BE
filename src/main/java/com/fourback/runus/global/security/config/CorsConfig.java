@@ -28,7 +28,7 @@ public class CorsConfig {
 	@Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOriginPattern("*"); //TODO 나중에 수정해야함
+        configuration.addAllowedOriginPattern("http://localhost:3000"); //TODO 나중에 수정해야함
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
         configuration.setAllowCredentials(true);
@@ -37,4 +37,5 @@ public class CorsConfig {
 
         return source;
     }
+    
 }
