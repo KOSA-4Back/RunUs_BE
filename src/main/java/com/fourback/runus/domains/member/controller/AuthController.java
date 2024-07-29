@@ -4,12 +4,9 @@ import static com.fourback.runus.global.error.errorCode.ResponseCode.EXISTS_EMAI
 import static com.fourback.runus.global.error.errorCode.ResponseCode.EXISTS_NICKNAME;
 import static com.fourback.runus.global.error.errorCode.ResponseCode.MEMBER_CREATED;
 
-import com.fourback.runus.domains.member.dto.requeset.AuthChangePasswordRequest;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.fourback.runus.global.redis.dto.GetTokenResponse;
-import com.fourback.runus.global.redis.service.RedisAuthHandler;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,12 +20,15 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fourback.runus.domains.member.dto.requeset.AuthChangePasswordRequest;
 import com.fourback.runus.domains.member.dto.requeset.CreateMemberRequest;
 import com.fourback.runus.domains.member.dto.requeset.LoginRequest;
 import com.fourback.runus.domains.member.service.AuthService;
 import com.fourback.runus.domains.member.service.EmailService;
 import com.fourback.runus.domains.member.service.MemberService;
 import com.fourback.runus.global.error.errorCode.ResponseCode;
+import com.fourback.runus.global.redis.dto.GetTokenResponse;
+import com.fourback.runus.global.redis.service.RedisAuthHandler;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
