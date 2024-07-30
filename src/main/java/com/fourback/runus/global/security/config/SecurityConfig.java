@@ -1,8 +1,5 @@
 package com.fourback.runus.global.security.config;
 
-import com.fourback.runus.global.security.filter.JwtAuthenticationFilter;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -13,6 +10,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfigurationSource;
+
+import com.fourback.runus.global.security.filter.JwtAuthenticationFilter;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 
 
 /**
@@ -52,7 +54,9 @@ public class SecurityConfig {
             .authorizeHttpRequests(authorize -> authorize
                     .requestMatchers("/api/auth/login", "/api/auth/register", 
                     		"/api/auth/forgot-password", "/api/auth/verify-code",
-                    		"/api/auth/change-password").permitAll()
+                    		"/api/auth/change-password", "/api/auth/check-email", 
+                    		"/api/auth/check-nickname").permitAll()
+//            		.requestMatchers("/api/auth/**").permitAll()
                 .anyRequest().authenticated()
             )
                 .logout(logout -> logout.logoutUrl("/api/auth/logout") // 레디스에서 토큰 파기를 위한 로그아웃 필터 구현 by 영훈
