@@ -5,6 +5,7 @@ import static com.fourback.runus.global.error.errorCode.ResponseCode.MEMBER_UPDA
 import com.fourback.runus.domains.member.dto.requeset.MemberChangePasswordRequest;
 import com.fourback.runus.domains.member.dto.requeset.UpdateMemberRequest;
 import com.fourback.runus.domains.member.dto.response.FindMembersResponse;
+import com.fourback.runus.domains.member.dto.response.MemberInfoTodayRunResponse;
 import com.fourback.runus.domains.member.service.MemberService;
 import com.fourback.runus.global.error.errorCode.ResponseCode;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +33,7 @@ import org.springframework.web.multipart.MultipartFile;
  * 2024-07-22        김영훈             최초 생성
  * 2024-07-23        김민지             회원정보 수정 메서드 추가
  * 2024-07-26        김은정             회원정보 수정 메서드 수정/비밀번호 변경 메서드 수정
+ * 2024-07-30        김은정             조회 (userId 기준 조회) / members, 오늘 목표, 오늘 달리기 정보 생성
  */
 @Log4j2
 @RequiredArgsConstructor
@@ -42,13 +44,22 @@ public class MemberController {
     private final MemberService memberService;
 
 
-    // 조회 (userId 기준 조회)
+    // 조회 (userId 기준 조회), members 만 조회
     @GetMapping("/info/{user-id}")
     public ResponseEntity<Object> memberInfo(@PathVariable("user-id") Long userId) {
         FindMembersResponse findMembersResponse = FindMembersResponse.from(
             memberService.findById(userId));
 
         return ResponseEntity.ok().body(findMembersResponse);
+    }
+
+    // 조회 (userId 기준 조회) / members, 오늘 목표, 오늘 달리기 정보
+    @GetMapping("/info/today/{user-id}")
+    public ResponseEntity<Object> memberInfoTodayGoalRun(@PathVariable("user-id") Long userId) {
+        MemberInfoTodayRunResponse memberInfoTodayRunResponse =
+            memberService.memberInfoTodayGoalRun(userId);
+
+        return ResponseEntity.ok().body(memberInfoTodayRunResponse);
     }
 
 

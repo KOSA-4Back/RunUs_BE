@@ -20,10 +20,16 @@ import java.util.List;
  * -----------------------------------------------------------
  * 2024-07-23        강희원            최초 생성
  * 2024-07-26        김은정            명칭 수정
+ * 2024-07-30        김은정            RunTotalInfos 조회 (todayGoalId 기준) 생성
  */
 @Repository
 public interface RunTotalInfosRepository extends JpaRepository<RunTotalInfos, Long> {
 
     @Query("SELECT r.totalDistance From RunTotalInfos r Where r.todayGoalId = :todayGoalId")
     List<Long> findAllBytodayGoalId(@Param("todayGoalId") Long todayGoalId);
+
+
+    // RunTotalInfos 조회 (todayGoalId 기준)
+    @Query("SELECT r FROM RunTotalInfos r WHERE r.todayGoalId = :todayGoalId")
+    List<RunTotalInfos> findByTodayGoalId(Long todayGoalId);
 }

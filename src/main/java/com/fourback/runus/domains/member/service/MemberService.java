@@ -8,17 +8,25 @@ import com.fourback.runus.domains.member.dto.requeset.LoginRequest;
 import com.fourback.runus.domains.member.dto.requeset.MemberChangePasswordRequest;
 import com.fourback.runus.domains.member.dto.requeset.UpdateMemberRequest;
 import com.fourback.runus.domains.member.dto.response.FindMembersResponse;
+import com.fourback.runus.domains.member.dto.response.MemberInfoTodayRunResponse;
+import com.fourback.runus.domains.member.dto.response.TodayTotalDistanceCalDto;
 import com.fourback.runus.domains.member.repository.MemberRepository;
+import com.fourback.runus.domains.running.domain.RunTotalInfos;
+import com.fourback.runus.domains.running.domain.TodayGoal;
+import com.fourback.runus.domains.running.dto.response.FindTodayGoalResponse;
+import com.fourback.runus.domains.running.repository.RunTotalInfosRepository;
+import com.fourback.runus.domains.running.repository.TodayGoalRepository;
+import com.fourback.runus.global.amazon.service.S3Service;
 import com.fourback.runus.global.error.exception.CustomBaseException;
 import com.fourback.runus.global.error.exception.NotFoundException;
 import com.fourback.runus.global.redis.dto.GetTokenResponse;
 import com.fourback.runus.global.security.provider.JwtProvider;
-import com.fourback.runus.global.amazon.service.S3Service;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,6 +46,7 @@ import org.springframework.web.multipart.MultipartFile;
  * 2024-07-24        김은정            회원가입/로그인 기능 메서드 수정
  * 2024-07-26        김은정            회원정보 수정 메서드 수정
  * 2024-07-26        김영훈            로그인시 반환값 수정
+ * 2024-07-30        김은정            프로필 정보 조회 메서드 생성
  */
 @Log4j2
 @Service
@@ -45,6 +54,9 @@ import org.springframework.web.multipart.MultipartFile;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final TodayGoalRepository todayGoalRepository;
+    private final RunTotalInfosRepository runTotalInfosRepository;
+
     private final BCryptPasswordEncoder passwordEncoder;
     private final S3Service s3Service;
     private final JwtProvider jwtProvider;
@@ -216,5 +228,34 @@ public class MemberService {
         // 비밀번호 변경
         member.setPassword(passwordEncoder.encode(memberChangePasswordRequest.changePassword()));
         memberRepository.save(member);
+    }
+
+    
+    // 프로필 정보 조회
+    // members, 오늘 목표, 오늘 달리기 정보 조회
+    public MemberInfoTodayRunResponse memberInfoTodayGoalRun(Long userId) {
+
+        // 유저 확인
+        Member member = memberRepository.findById(userId)
+            .orElseThrow(() -> new NotFoundException("존재하지 않은 유저입니다."));
+
+        // 오늘 목표
+        TodayGoal todayGoal = todayGoalRepository.findByUserIdAndToday(userId, LocalDate.now());
+
+        // 오늘 달리기 정보
+        List<RunTotalInfos> runTotalInfosList =
+            runTotalInfosRepository.findByTodayGoalId(todayGoal.getTodayGoalId());
+        long totalDistance = runTotalInfosList.stream()
+            .mapToLong(RunTotalInfos::getTotalDistance)
+            .sum();
+        long totalCalories = runTotalInfosList.stream().
+            mapToLong(RunTotalInfos::getTotalCalories)
+            .sum();
+
+        TodayTotalDistanceCalDto TodayTotalDistanceCalDto =
+            new TodayTotalDistanceCalDto(totalDistance, totalCalories);
+
+        return MemberInfoTodayRunResponse.of(FindMembersResponse.from(member),
+                FindTodayGoalResponse.from(todayGoal), TodayTotalDistanceCalDto);
     }
 }
