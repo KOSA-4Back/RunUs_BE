@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fourback.runus.domains.member.dto.requeset.AuthChangePasswordRequest;
 import com.fourback.runus.domains.member.dto.requeset.CreateMemberRequest;
 import com.fourback.runus.domains.member.dto.requeset.LoginRequest;
@@ -60,13 +62,24 @@ public class AuthController {
     private final EmailService emailService;
     private final RedisAuthHandler redisAuthHandler; //레디스 저장을 위한 주입 by Yh
 
+    private final ObjectMapper objectMapper;
 
     // 회원가입
     @PostMapping(value = "/register", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<ResponseCode> register(
-        @Valid @RequestPart("form") CreateMemberRequest createMemberRequest,
+        @Valid @RequestPart("form") String createMemberRequestJson,
         @RequestPart(value = "file", required = false) MultipartFile multipartFile) {
 
+    	log.info("넘어는오니?" + createMemberRequestJson);
+    	
+    	CreateMemberRequest createMemberRequest;
+        try {
+            createMemberRequest = objectMapper.readValue(createMemberRequestJson, CreateMemberRequest.class);
+            log.info(createMemberRequest + "");
+        } catch (JsonProcessingException e) {
+            log.error("JSON parsing error", e);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null); // 적절한 에러 처리
+        }
         log.info("====>>>>>>>>>> into register");
 
         // 저장
@@ -88,6 +101,7 @@ public class AuthController {
         String token = tokenResponse.token();
         Map<String, String> response = new HashMap<>();
         response.put("Token", token);
+        response.put("UserId", String.valueOf(userId)); // Add UserId to the response
 
         redisAuthHandler.login(userId, token); // 레디스 저장
         return ResponseEntity.ok(response);
