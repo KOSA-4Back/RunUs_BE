@@ -1,5 +1,5 @@
 ### Member 생성 요청
-POST http://localhost:8080/member/create
+POST http://localhost:8080/api/auth/register
 Content-Type: application/json
 
 {
@@ -60,6 +60,8 @@ GET http://localhost:8081/member/findAll
 
 ### 메인 서버에서 전체 Member 검색 (오라클)
 GET http://localhost:8080/member/findAll
+Content-Type: application/json
+Authorization: Bearer {{login_token}}
 
 
 ### 소프트 DELETE
@@ -79,10 +81,10 @@ Content-Disposition: form-data; name="form"; filename="blob"
 Content-Type: application/json
 
 {
-  "email": "onlyEnglishPrimay@example.com",
-  "nickName": "tonic",
-  "password": "password123",
-  "birth": "1990-01-01",
+  "email": "qwer@gmail.com",
+  "nickName": "HanlaSan",
+  "password": "qwer1234",
+  "birth": "1994-01-01",
   "height": 180,
   "weight": 75
 }
@@ -94,16 +96,18 @@ Content-Type: text/plain
 --boundary--
 
 ### 로그인 요청
+@loginRequest = "qwer@gmail.com"
+@password = "qwer1234"
 POST http://localhost:8080/api/auth/login
 Content-Type: application/json
 
 {
-  "email": "onlyEnglishPrimay@example.com",
-  "password": "password123"
+  "email": {{loginRequest}},
+  "password": {{password}}
 }
 
 ### 로그아웃 / 토큰 파기 테스트 (로그인 토큰 " " 쌍따옴표 꼭 뺴주세요)
-@login_token = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QGV4YW1wbGUuY29tIiwidXNlcklkIjoxLCJyb2xlIjoiVVNFUiIsImlhdCI6MTcyMjAxMDg5MywiZXhwIjoxNzIyMDEyNjkzfQ.rS4Mmvw0Mu2KBgZur-MtuQSNOW7gjQn2LcVDgkJTmW4
+@login_token = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJxd2VyQGdtYWlsLmNvbSIsInVzZXJJZCI6MjMsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzIyMjY2ODg1LCJleHAiOjE3MjIzNTMyODV9.XDMEy9zzCczmxreztxaKrHahIAdnM-Jo8JovnUt39IU
 POST localhost:8080/api/auth/logout
 Content-Type: application/json
 Authorization: Bearer {{login_token}}

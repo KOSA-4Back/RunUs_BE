@@ -25,11 +25,11 @@ public class MQSender { // rabbitTemplate 캡슐화
         rabbitTemplate.convertAndSend(MQExchange.DIRECT.getExchangeName(), routingKey, message);
     }
 
-    public void sendToFanoutExchange(Object message){
-        rabbitTemplate.convertAndSend(MQExchange.FANOUT.getExchangeName(), "", message);
-    }
-
-    public void sendToTopicExchange(String routingKey, Object message){
-        rabbitTemplate.convertAndSend(MQExchange.TOPIC.getExchangeName(), routingKey, message);
-    }
+//    public void sendToFanoutExchange(Object message){
+//        rabbitTemplate.convertAndSend(MQExchange.FANOUT.getExchangeName(), "", message);
+//    }
+//
+//    public void sendToTopicExchange(String routingKey, Object message){
+//        rabbitTemplate.convertAndSend(MQExchange.TOPIC.getExchangeName(), routingKey, message);
+//    }
 }
