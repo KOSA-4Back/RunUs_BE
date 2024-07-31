@@ -38,6 +38,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
 
         try {
+            log.info("====>>>>>>>>>> doFilterInternal {}", request.getRequestURI());
 
             String token = getJwtFromRequest(request);
             if (StringUtils.hasText(token)) {
@@ -77,9 +78,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
 
-        String[] api = {"/api/auth/register", "/api/auth/login", 
-        		"/api/auth/forgot-password", "/api/auth/verify-code",
-        		"/api/auth/change-password"};
+        String[] api = {"/api/auth/login", "/api/auth/register",
+                "/api/auth/forgot-password", "/api/auth/verify-code",
+                "/api/auth/change-password", "/api/auth/check-email",
+                "/api/auth/check-nickname"};
 
         String path = request.getRequestURI();
         return Arrays.stream(api).anyMatch(path::startsWith);
