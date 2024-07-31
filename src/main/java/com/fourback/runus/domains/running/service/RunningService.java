@@ -1,11 +1,5 @@
 package com.fourback.runus.domains.running.service;
 
-import java.time.LocalDate;
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.fourback.runus.domains.member.repository.MemberRepository;
 import com.fourback.runus.domains.running.domain.RunTotalInfos;
 import com.fourback.runus.domains.running.domain.TodayGoal;
@@ -15,23 +9,32 @@ import com.fourback.runus.domains.running.dto.request.StartRunningRequest;
 import com.fourback.runus.domains.running.dto.request.UpdateRunningRequest;
 import com.fourback.runus.domains.running.dto.response.EndRunningResponse;
 import com.fourback.runus.domains.running.dto.response.StartRunningResponse;
-import com.fourback.runus.domains.running.dto.response.StartRunningResponse.StartRunningResponseBuilder;
 import com.fourback.runus.domains.running.dto.response.TodayGoalResponse;
 import com.fourback.runus.domains.running.repository.LocationsRepository;
 import com.fourback.runus.domains.running.repository.RunTotalInfosRepository;
 import com.fourback.runus.domains.running.repository.TodayGoalRepository;
-import com.fourback.runus.domains.running.repository.TodayGoalRepository2;
 import com.fourback.runus.global.error.exception.NotFoundException;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+
+
 
 /**
- * packageName : com.fourback.runus.domains.running.service fileName :
- * RunningService author : 강희원 date : 2024-07-23 description :
- * =========================================================== DATE AUTHOR NOTE
- * ----------------------------------------------------------- 2024-07-23 강희원 최초
- * 생성 2024-07-26 김은정 전체 메서드 설계한 로직 수정
+ * packageName    : com.fourback.runus.domains.running.repository
+ * fileName       : TodayGoalRepository
+ * author         : 강희원
+ * date           : 2024-07-23
+ * description    :
+ * ===========================================================
+ * DATE              AUTHOR             NOTE
+ * -----------------------------------------------------------
+ * 2024-07-23        강희원            최초 생성
+ * 2024-07-26        김은정            전체 메서드 설계한 로직 수정
+ * 2024-07-26        강희원            최신 러닝 날짜 메서드 수정
  */
 @Slf4j
 @RequiredArgsConstructor
@@ -40,7 +43,6 @@ public class RunningService {
 
 	private final MemberRepository memberRepository;
 	private final TodayGoalRepository todayGoalRepository;
-	private final TodayGoalRepository2 todayGoalRepository2;
 	private final RunTotalInfosRepository runTotalInfosRepository;
 	private final LocationsRepository locationsRepository;
 
@@ -57,7 +59,7 @@ public class RunningService {
 
         // 네이티브 쿼리 결과 가져오기
 		TodayGoal todayGoal =
-				todayGoalRepository2.findTopByUserIdAndTodayOrderByRegistedAtDesc(userId, LocalDate.now());
+				todayGoalRepository.findTopByUserIdAndTodayOrderByRegistedAtDesc(userId, LocalDate.now());
 		
 		if(todayGoal != null) {
 			return TodayGoalResponse.from(todayGoal);
@@ -83,8 +85,10 @@ public class RunningService {
 				.save(RunTotalInfos.builder().todayGoalId(goalEntity.getTodayGoalId()).userId(request.userId())
 						.startTime(goalEntity.getRegistedAt()).build());
 
-		return StartRunningResponse.builder().TodayGoalId(goalEntity.getTodayGoalId())
-				.RunTotalInfoId(saveRunTotalInfos.getTotalInfoId()).build();
+		return StartRunningResponse.builder()
+				.TodayGoalId(goalEntity.getTodayGoalId())
+				.RunTotalInfoId(saveRunTotalInfos.getTotalInfoId())
+				.build();
 	}
 
 	// 러닝 또 시작 시
@@ -105,8 +109,10 @@ public class RunningService {
 				.save(RunTotalInfos.builder().todayGoalId(updateTodayGoal.getTodayGoalId()).userId(request.userId())
 						.startTime(updateTodayGoal.getRegistedAt()).build());
 
-		return StartRunningResponse.builder().TodayGoalId(updateTodayGoal.getTodayGoalId())
-				.RunTotalInfoId(saveRunTotalInfos.getTotalInfoId()).build();
+		return StartRunningResponse.builder()
+				.TodayGoalId(updateTodayGoal.getTodayGoalId())
+				.RunTotalInfoId(saveRunTotalInfos.getTotalInfoId())
+				.build();
 	}
 
 	// 러닝 실시간 데이터 저장
@@ -136,7 +142,4 @@ public class RunningService {
 		return !memberRepository.existsById(userId);
 	}
 
-	private List<Long> getTotalDistance(Long todayGoalId) {
-		return runTotalInfosRepository.findAllBytodayGoalId(todayGoalId);
-	}
 }
