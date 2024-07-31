@@ -2,6 +2,15 @@ package com.fourback.runus.domains.member.service;
 
 import static com.fourback.runus.global.error.errorCode.ResponseCode.PASSWORD_INVALID;
 
+import java.io.IOException;
+import java.time.LocalDate;
+import java.util.List;
+
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.fourback.runus.domains.member.domain.Member;
 import com.fourback.runus.domains.member.dto.requeset.CreateMemberRequest;
 import com.fourback.runus.domains.member.dto.requeset.LoginRequest;
@@ -21,16 +30,9 @@ import com.fourback.runus.global.error.exception.CustomBaseException;
 import com.fourback.runus.global.error.exception.NotFoundException;
 import com.fourback.runus.global.redis.dto.GetTokenResponse;
 import com.fourback.runus.global.security.provider.JwtProvider;
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 /**
  * packageName    : com.fourback.runus.member.service
@@ -118,9 +120,13 @@ public class MemberService {
         // 이미지 S3에 저장
         String imageUrl = "";
         if (multipartFile != null && !multipartFile.isEmpty()) {
-            imageUrl = s3Service.uploadFile(multipartFile);
-            log.debug("====>>>>>>>>>> s3Service {}", s3Service.uploadFile(multipartFile));
-
+            try {
+                imageUrl = s3Service.uploadFile(multipartFile);
+                log.debug("====>>>>>>>>>> 업로드된 이미지 URL: " + imageUrl);
+            } catch (Exception e) {
+                log.error("이미지 업로드 실패", e);
+                throw new RuntimeException("이미지 업로드 실패", e);
+            }
         }
 
         Member saveMember = memberRepository.save(Member.builder()
@@ -133,6 +139,7 @@ public class MemberService {
             .weight(createMemberRequest.weight())
             .build());
 
+        log.info("저장된 멤버: " + saveMember);
         // 저장
         return saveMember.getUserId();
     }

@@ -70,9 +70,12 @@ public class AuthController {
         @Valid @RequestPart("form") String createMemberRequestJson,
         @RequestPart(value = "file", required = false) MultipartFile multipartFile) {
 
-    	log.info("넘어는오니?" + createMemberRequestJson);
-    	
-    	CreateMemberRequest createMemberRequest;
+        log.info("넘어는오니?" + createMemberRequestJson);
+        if (multipartFile != null) {
+            log.info("파일 이름: " + multipartFile.getOriginalFilename());
+        }
+
+        CreateMemberRequest createMemberRequest;
         try {
             createMemberRequest = objectMapper.readValue(createMemberRequestJson, CreateMemberRequest.class);
             log.info(createMemberRequest + "");
