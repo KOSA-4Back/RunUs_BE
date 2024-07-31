@@ -19,6 +19,8 @@ import com.fourback.runus.domains.running.repository.TodayGoalRepository;
 import com.fourback.runus.global.amazon.service.S3Service;
 import com.fourback.runus.global.error.exception.CustomBaseException;
 import com.fourback.runus.global.error.exception.NotFoundException;
+import com.fourback.runus.global.rabbitMQ.dto.User;
+import com.fourback.runus.global.rabbitMQ.dto.UserEvent;
 import com.fourback.runus.global.redis.dto.GetTokenResponse;
 import com.fourback.runus.global.security.provider.JwtProvider;
 import java.io.IOException;
@@ -27,6 +29,7 @@ import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,6 +50,7 @@ import org.springframework.web.multipart.MultipartFile;
  * 2024-07-26        김은정            회원정보 수정 메서드 수정
  * 2024-07-26        김영훈            로그인시 반환값 수정
  * 2024-07-30        김은정            프로필 정보 조회 메서드 생성
+ * 2024-07-31        김영훈            유저 이벤트 처리
  */
 @Log4j2
 @Service
@@ -56,7 +60,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final TodayGoalRepository todayGoalRepository;
     private final RunTotalInfosRepository runTotalInfosRepository;
-
+    private final RabbitTemplate rabbitTemplate;
     private final BCryptPasswordEncoder passwordEncoder;
     private final S3Service s3Service;
     private final JwtProvider jwtProvider;
@@ -133,6 +137,7 @@ public class MemberService {
             .weight(createMemberRequest.weight())
             .build());
 
+        rabbitTemplate.convertAndSend("user.ex", "user.event", UserEvent.of("CREATE", User.from(saveMember)));
         // 저장
         return saveMember.getUserId();
     }
@@ -206,7 +211,7 @@ public class MemberService {
         member.updateMemberInfo(request, imageUrl);
         Member updatedMember = memberRepository.save(member);  // 변경사항 저장
         log.info("Updated member: {}", updatedMember);
-
+        rabbitTemplate.convertAndSend("user.ex", "user.event", UserEvent.of("UPDATE", User.from(updatedMember)));
         return FindMembersResponse.from(member);
     }
 
