@@ -50,6 +50,7 @@ import lombok.extern.log4j.Log4j2;
  * 2024-07-24        김민지            회원 정보 수정 및 비밀번호 찾기/변경 메서드 생성 및 수정
  * 2024-07-26        김은정            회원 정보 수정 및 비밀번호 변경 메서드 수정
  * 2024-07-26        김영훈            로그인 시 redis에 저장되게 수정
+ * 2024-07-31        김영훈            USER-EVENT 생성
  */
 @Log4j2
 @RestController
@@ -70,7 +71,7 @@ public class AuthController {
         @Valid @RequestPart("form") String createMemberRequestJson,
         @RequestPart(value = "file", required = false) MultipartFile multipartFile) {
 
-    	log.info("넘어는오니?" + createMemberRequestJson);
+    	log.info("넘어는오니? : {}", createMemberRequestJson);
     	
     	CreateMemberRequest createMemberRequest;
         try {
