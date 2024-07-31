@@ -1,14 +1,16 @@
 package com.fourback.runus.domains.running.repository;
 
 import com.fourback.runus.domains.running.domain.TodayGoal;
+import com.fourback.runus.domains.running.dto.response.TodayGoalResponse;
+
 import java.time.LocalDate;
-import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-
 import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -26,12 +28,10 @@ import java.util.Date;
  */
 @Repository
 public interface TodayGoalRepository extends JpaRepository<TodayGoal, Long> {
-
-    @Query(value = "SELECT today FROM (SELECT today FROM today_goal WHERE user_id = :userId ORDER BY today DESC) WHERE ROWNUM = 1", nativeQuery = true)
-    Date findTopTodayByUserId(@Param("userId") Long userId);
-
+	
+	
 
     // 조회 (오늘 날짜 기준)
-    TodayGoal findByUserIdAndToday(@Param("userId") Long userId, @Param("today") LocalDate today);
-}
+    List<TodayGoal>  findByUserIdAndToday(@Param("userId") Long userId, @Param("today") LocalDate today);
 
+}

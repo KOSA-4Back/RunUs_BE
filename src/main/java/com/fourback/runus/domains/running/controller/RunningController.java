@@ -6,11 +6,16 @@ import com.fourback.runus.domains.running.dto.request.StartRunningRequest;
 import com.fourback.runus.domains.running.dto.request.UpdateRunningRequest;
 import com.fourback.runus.domains.running.dto.response.EndRunningResponse;
 import com.fourback.runus.domains.running.dto.response.StartRunningResponse;
+import com.fourback.runus.domains.running.dto.response.TodayGoalResponse;
 import com.fourback.runus.domains.running.service.RunningService;
 import com.fourback.runus.global.error.errorCode.ResponseCode;
+
+import java.time.LocalDate;
 import java.util.Date;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.bytebuddy.asm.Advice.Local;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,6 +38,7 @@ import org.springframework.web.bind.annotation.RestController;
  * -----------------------------------------------------------
  * 2024-07-23        강희원            최초 생성
  * 2024-07-26        김은정            전체 메서드 로직 수정
+ * 2024-07-31        강희원            strat 로직 수정
  */
 @Slf4j
 @RequiredArgsConstructor
@@ -46,15 +52,11 @@ public class RunningController {
 
     //최신 목표 정보 (최신 날짜와 오늘 날짜<프론트> 비교) 1.다를 때 start로 2.같을 때 update V
     @GetMapping("/select/{user-id}")
-    public ResponseEntity<Date> selectRunning(@PathVariable(value = "user-id") Long userId) {
+    public ResponseEntity<TodayGoalResponse> selectRunning(@PathVariable(value = "user-id") Long userId) {
         log.info("userId {}", userId);
-        Date today = runningService.select(userId);
-
-//    	todayEntity.getToday();
-//    	long todayGoalId = todayEntity.getTodayGoalId(); //날짜 같으면 사용할 목표 아이디 => 업데이트로 아이디, 목표km 보내주기
-        log.info("today : {}", today);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(today);
+        TodayGoalResponse response = runningService.select(userId);
+        
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     //러닝 목표 설정 = > 인공키 생성  V
@@ -100,6 +102,7 @@ public class RunningController {
     //러닝 종료 => 프론트에서 받은 인공키로 정보 저장
     @PostMapping("/end")
     public ResponseEntity<ResponseCode> endRunning(@RequestBody EndRunningRequest request) {
+    	  System.out.println("Received totalTime: " + request.totalInfoId());
         EndRunningResponse endRunningResponse = runningService.endRunning(request);
 
         return ResponseEntity.status(HttpStatus.OK)

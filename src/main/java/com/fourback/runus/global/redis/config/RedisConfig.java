@@ -17,6 +17,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
  * DATE              AUTHOR             NOTE
  * -----------------------------------------------------------
  * 2024-07-26        Yeong-Huns       최초 생성
+ * 2024-07-31        Yeong-Huns       세션 관리
  */
 @Configuration
 public class RedisConfig {
@@ -32,4 +33,15 @@ public class RedisConfig {
         template.afterPropertiesSet();
         return template;
     }
+    @Bean
+    public RedisTemplate<String, String> sessionRedisTemplate(RedisConnectionFactory factory) {
+        RedisTemplate<String, String> template = new RedisTemplate<>();
+        template.setConnectionFactory(factory);
+        template.setKeySerializer(new StringRedisSerializer());
+        template.setValueSerializer(new StringRedisSerializer());
+        template.setEnableTransactionSupport(true);
+        template.afterPropertiesSet();
+        return template;
+    }
+
 }

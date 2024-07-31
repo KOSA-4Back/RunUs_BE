@@ -27,6 +27,9 @@ public record FindTodayGoalResponse (
         LocalDateTime deletedAt
 ) {
     public static FindTodayGoalResponse from(TodayGoal todayGoal) {
+
+        if (todayGoal == null) return null;
+
         return FindTodayGoalResponse.builder()
                 .todayGoalId(todayGoal.getTodayGoalId())
                 .userId(todayGoal.getUserId())
