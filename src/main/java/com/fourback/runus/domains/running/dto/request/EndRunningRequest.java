@@ -1,5 +1,7 @@
 package com.fourback.runus.domains.running.dto.request;
 
+import java.time.LocalDateTime;
+
 /**
  * packageName    : com.fourback.runus.domains.running.dto.request
  * fileName       : EndRunningRequest
@@ -13,9 +15,12 @@ package com.fourback.runus.domains.running.dto.request;
  * 2024-07-26        김은정            id 성 long -> Long 수정
  */
 public record EndRunningRequest(
-        Long totalInfoId,
+		Long totalInfoId,
         Long userId,
         long totalDistance,
-        long totalCalories
+        long totalCalories,
+        LocalDateTime startTime,
+        LocalDateTime endTime,
+        String totalTime
 ) {
 }

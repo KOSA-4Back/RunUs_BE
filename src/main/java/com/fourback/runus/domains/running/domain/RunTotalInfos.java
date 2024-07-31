@@ -24,6 +24,7 @@ import java.util.List;
  * -----------------------------------------------------------
  * 2024-07-23        강희원            최초 생성
  * 2024-07-26        김은정            Locations 연관관계 맺음/changeTotal(), calculateWorkTime() 메서드 추간
+ * 2024-07-31        강희원            totalTime 수정
  */
 @Entity
 @Table(name = "run_total_infos")
@@ -62,20 +63,12 @@ public class RunTotalInfos {
         this.locationsList = locationsList;
     }
 
-
     // 업데이트
     public void changeTotal(EndRunningRequest request) {
         this.endTime = LocalDateTime.now();
         this.totalDistance = request.totalDistance();
         this.totalCalories = request.totalCalories();
-        this.totalTime = calculateWorkTime(this.startTime, this.endTime);
+        this.totalTime = request.totalTime();
     }
 
-    // 총 시간 계산
-    private String calculateWorkTime(LocalDateTime startTime, LocalDateTime endTime) {
-        Duration duration = Duration.between(startTime, endTime);
-        long hours = duration.toHours();
-        long minutes = duration.toMinutes() % 60;
-        return String.format("%02d:%02d", hours, minutes);
-    }
 }
