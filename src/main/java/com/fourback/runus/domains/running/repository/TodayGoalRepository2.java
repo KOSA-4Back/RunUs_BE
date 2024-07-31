@@ -1,16 +1,13 @@
 package com.fourback.runus.domains.running.repository;
 
-import com.fourback.runus.domains.running.domain.TodayGoal;
-import com.fourback.runus.domains.running.dto.response.TodayGoalResponse;
-
 import java.time.LocalDate;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+
+import com.fourback.runus.domains.running.domain.TodayGoal;
 
 
 /**
@@ -27,11 +24,11 @@ import java.util.Optional;
  * 2024-07-30        김은정            조회 (오늘 날짜 기준) 생성
  */
 @Repository
-public interface TodayGoalRepository extends JpaRepository<TodayGoal, Long> {
-	
-	
+public interface TodayGoalRepository2 extends JpaRepository<TodayGoal, Long> {
 
-    // 조회 (오늘 날짜 기준)
-    List<TodayGoal>  findByUserIdAndToday(@Param("userId") Long userId, @Param("today") LocalDate today);
+
+	 // 조회 (오늘 날짜 기준, 가장 최신의 레코드 하나만 반환)
+	TodayGoal findTopByUserIdAndTodayOrderByRegistedAtDesc(@Param("userId") Long userId, @Param("today") LocalDate today);
+
 
 }

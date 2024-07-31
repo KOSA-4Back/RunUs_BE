@@ -19,27 +19,27 @@ import lombok.Builder;
  */
 @Builder
 public record EndRunningResponse(
-    Long totalInfoId,
-    Long todayGoalId,
-    Long userId,
-    LocalDateTime startTime,
-    LocalDateTime endTime,
-    long totalDistance,
-    long totalCalories,
-    String totalTime,
-    LocalDateTime deletedAt
-) {
-    public static EndRunningResponse from(RunTotalInfos runTotalInfos) {
-        return EndRunningResponse.builder()
-            .totalInfoId(runTotalInfos.getTotalInfoId())
-            .todayGoalId(runTotalInfos.getTodayGoalId())
-            .userId(runTotalInfos.getUserId())
-            .startTime(runTotalInfos.getStartTime())
-            .endTime(runTotalInfos.getEndTime())
-            .totalDistance(runTotalInfos.getTotalDistance())
-            .totalCalories(runTotalInfos.getTotalCalories())
-            .totalTime(runTotalInfos.getTotalTime())
-            .deletedAt(runTotalInfos.getDeletedAt())
-            .build();
-    }
-}
+	    Long totalInfoId,
+	    Long todayGoalId,
+	    Long userId,
+	    LocalDateTime startTime,
+	    LocalDateTime endTime,
+	    long totalDistance,
+	    long totalCalories,
+	    String totalTime,
+	    LocalDateTime deletedAt
+	) {
+	    public static EndRunningResponse from(RunTotalInfos runTotalInfos) {
+	        return EndRunningResponse.builder()
+	            .totalInfoId(runTotalInfos.getTotalInfoId())
+	            .todayGoalId(runTotalInfos.getTodayGoalId())
+	            .userId(runTotalInfos.getUserId())
+	            .startTime(runTotalInfos.getStartTime())
+	            .endTime(runTotalInfos.getEndTime())
+	            .totalDistance(runTotalInfos.getTotalDistance())
+	            .totalCalories(runTotalInfos.getTotalCalories())
+	            .totalTime(runTotalInfos.getTotalTime())
+	            .deletedAt(runTotalInfos.getDeletedAt())
+	            .build();
+	    }
+	}
