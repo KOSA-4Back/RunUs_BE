@@ -37,5 +37,6 @@ public interface RunTotalInfosRepository extends JpaRepository<RunTotalInfos, Lo
 
 
     // 당일 이전 최근 2건 조회
-    List<RunTotalInfos> findTop2ByUserIdAndStartTimeBeforeOrderByStartTimeDesc(Long userId, LocalDateTime startTime);
+    @Query(value = "SELECT * FROM run_total_infos r WHERE r.user_id = :userId AND TRUNC(r.start_time) < :startDate ORDER BY r.start_time DESC FETCH FIRST 2 ROWS ONLY", nativeQuery = true)
+    List<RunTotalInfos> findTop2ByUserIdAndStartTime(@Param("userId") Long userId, @Param("startDate") LocalDate startDate);
 }

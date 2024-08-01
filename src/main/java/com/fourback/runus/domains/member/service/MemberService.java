@@ -299,7 +299,7 @@ public class MemberService {
         log.info("====>>>>>>>>>> memberInfoActive {}", userId);
 
         List<RunTotalInfos> totalInfosList =
-                runTotalInfosRepository.findTop2ByUserIdAndStartTimeBeforeOrderByStartTimeDesc(userId, LocalDateTime.now());
+                runTotalInfosRepository.findTop2ByUserIdAndStartTime(userId, LocalDate.now());
 
         // 날짜 기준으로 그룹화하고 합산
         Map<LocalDate, RunTotalInfosSummaryWith> summaryMap = totalInfosList.stream()
@@ -328,6 +328,8 @@ public class MemberService {
                 ));
 
         // Map의 값들을 List로 변환하여 반환
-        return new ArrayList<>(summaryMap.values());
+        return summaryMap.values().stream()
+                .sorted((summary1, summary2) -> summary2.date().compareTo(summary1.date())) // 최신순으로 정렬
+                .collect(Collectors.toList());
     }
 }
