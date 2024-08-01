@@ -30,8 +30,9 @@ public class CorsConfig {
 	@Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOriginPattern("http://localhost:3000"); //TODO 나중에 수정해야함
-//        configuration.addAllowedOriginPattern("https://4b2d-115-93-148-232.ngrok-free.app");
+        configuration.addAllowedOriginPattern("http://localhost:3000/runus"); //TODO 나중에 수정해야함
+        configuration.addAllowedOriginPattern("http://localhost:8081"); // ChatServer
+//       configuration.addAllowedOriginPattern("https://4b2d-115-93-148-232.ngrok-free.app");
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
         configuration.setAllowCredentials(true);
