@@ -29,6 +29,7 @@ import lombok.extern.log4j.Log4j2;
  * 2024-07-22        김민지            최초 생성
  * 2024-07-24        김은정            수정, 암호화 추가
  * 2024-07-26        김영훈            로그아웃 추가
+ * 2024-08-01        김은정            .permitAll() 에 url 추가
  */
 @Log4j2
 @Configuration
@@ -52,7 +53,7 @@ public class SecurityConfig {
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(authorize -> authorize
-                    .requestMatchers("/api/auth/login", "/api/auth/register", 
+                    .requestMatchers("/","/favicon.ico", "/runus/**","/api/auth/login", "/api/auth/register",
                     		"/api/auth/forgot-password", "/api/auth/verify-code",
                     		"/api/auth/change-password", "/api/auth/check-email", 
                     		"/api/auth/check-nickname", "/api/member/change-password/{user-id}").permitAll()

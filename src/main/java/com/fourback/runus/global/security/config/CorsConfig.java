@@ -20,6 +20,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
  * 2024-07-24        김은정            최초 생성
  * 2024-07-29        김민지            cors 프론트 포트 설정
  * 2024-07-30        김은정            cors ngrock 주소 설정
+ * 2024-08-01        김은정            cors ngrock 주소 추가 (프론트, 백엔드)
  */
 @Configuration
 public class CorsConfig {
@@ -32,9 +33,13 @@ public class CorsConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedOriginPattern("http://localhost:3000"); //TODO 나중에 수정해야함
         configuration.addAllowedOriginPattern("http://localhost:3000/runus"); //TODO 나중에 수정해야함
-        configuration.addAllowedOriginPattern("http://localhost:8081"); // ChatServer
-//       configuration.addAllowedOriginPattern("https://4b2d-115-93-148-232.ngrok-free.app");
-        configuration.addAllowedMethod("*");
+//        configuration.addAllowedOriginPattern("https://0de4-58-127-11-149.ngrok-free.app");
+//        configuration.addAllowedOriginPattern("https://de3f-58-127-11-149.ngrok-free.app");
+        configuration.addAllowedMethod("GET");
+        configuration.addAllowedMethod("POST");
+        configuration.addAllowedMethod("PUT");
+        configuration.addAllowedMethod("DELETE");
+        configuration.addAllowedMethod("OPTIONS");
         configuration.addAllowedHeader("*");
         configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
