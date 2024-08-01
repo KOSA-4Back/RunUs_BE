@@ -18,7 +18,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
  * DATE              AUTHOR             NOTE
  * -----------------------------------------------------------
  * 2024-07-24        김은정            최초 생성
- * 2024-07-29        김민정            cors 프론트 포트 설정
+ * 2024-07-29        김민지            cors 프론트 포트 설정
  * 2024-07-30        김은정            cors ngrock 주소 설정
  */
 @Configuration

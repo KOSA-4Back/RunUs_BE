@@ -1,12 +1,22 @@
 package com.fourback.runus.domains.running.dto.response;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 import com.fourback.runus.domains.running.domain.TodayGoal;
 
 import lombok.Builder;
 
+/**
+ * packageName    : com.fourback.runus.domains.running.dto.response
+ * fileName       : TodayGoalResponse
+ * author         : 강희원
+ * date           : 2024-07-31
+ * description    :
+ * ===========================================================
+ * DATE              AUTHOR             NOTE
+ * -----------------------------------------------------------
+ * 2024-07-31        강희원            최초 생성
+ */
 @Builder
 public record TodayGoalResponse(
         Long todayGoalId,

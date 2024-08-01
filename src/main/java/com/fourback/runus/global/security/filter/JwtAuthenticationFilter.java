@@ -81,7 +81,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String[] api = {"/api/auth/login", "/api/auth/register",
                 "/api/auth/forgot-password", "/api/auth/verify-code",
                 "/api/auth/change-password", "/api/auth/check-email",
-                "/api/auth/check-nickname"};
+                "/api/auth/check-nickname" , "/api/member/change-password/{user-id}"};
 
         String path = request.getRequestURI();
         return Arrays.stream(api).anyMatch(path::startsWith);
