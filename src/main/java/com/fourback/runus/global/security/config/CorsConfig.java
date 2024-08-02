@@ -33,8 +33,8 @@ public class CorsConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedOriginPattern("http://localhost:3000"); //TODO 나중에 수정해야함
         configuration.addAllowedOriginPattern("http://localhost:3000/runus"); //TODO 나중에 수정해야함
-//        configuration.addAllowedOriginPattern("https://0de4-58-127-11-149.ngrok-free.app");
-//        configuration.addAllowedOriginPattern("https://de3f-58-127-11-149.ngrok-free.app");
+//        configuration.addAllowedOriginPattern("https://4c96-115-93-148-232.ngrok-free.app");
+//        configuration.addAllowedOriginPattern("https://b3e9-115-93-148-232.ngrok-free.app");
         configuration.addAllowedMethod("GET");
         configuration.addAllowedMethod("POST");
         configuration.addAllowedMethod("PUT");
